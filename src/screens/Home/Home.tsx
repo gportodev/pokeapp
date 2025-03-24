@@ -1,21 +1,34 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Pokemons } from '../../components/Pokemons';
+import { SafeAreaView } from 'react-native';
 
-import { Container } from '../../components/Back/styles';
+import { HomeProps } from '@/routes/types';
+import { PokemonDTO } from '@/dtos/PokemonDTO';
+import { StatusBar } from 'expo-status-bar';
+import colors from '@/constants/colors';
 
-import {Header} from '../../components/Header';
-import {Pokemons} from '../../components/Pokemons';
-import {Bottom} from '../../components/Bottom';
+function Home({ navigation }: HomeProps): JSX.Element {
+  const onPress = useCallback(
+    (item: PokemonDTO) => {
+      navigation.navigate('Detail', { item });
+    },
+    [navigation],
+  );
 
-function Home({ navigation }) {
-    return (
-        <Container>
-            <Header />
-
-            <Pokemons navigation={navigation} />
-
-            <Bottom />
-        </Container>
-    );
+  return (
+    <SafeAreaProvider>
+      <SafeAreaView
+        style={{
+          flex: 1,
+          backgroundColor: colors.white,
+        }}
+      >
+        <StatusBar style="dark" />
+        <Pokemons onPress={onPress} />
+      </SafeAreaView>
+    </SafeAreaProvider>
+  );
 }
 
-export { Home }
+export { Home };
