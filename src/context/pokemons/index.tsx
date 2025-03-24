@@ -3,7 +3,6 @@ import React, {
   useState,
   useEffect,
   useContext,
-  ReactNode,
   useCallback,
 } from 'react';
 import { PokemonDTO } from '@/dtos/PokemonDTO';
@@ -12,21 +11,22 @@ import { PokemonsDTO } from '@/dtos/PokemonsDTO';
 import { Alert } from 'react-native';
 import { usePokemonDatabase } from '@/database/usePokemonDatabase';
 import _ from 'lodash';
-import { formatNameToShow } from '@/common/utils/pokemon';
-import * as FileSystem from 'expo-file-system';
+
+import { PokemonListContext, PokemonProps } from './types';
+import { saveImage } from '@/common/utils/file';
+import { formatNameToShow } from '@/common/utils/format';
 import { PokemonSpeciesDTO } from '@/dtos/PokemonSpeciesDTO';
 import { PokemonEvolutionChainDTO } from '@/dtos/PokemonEvolutionChainDTO';
-
-type PokemonProps = {
-  children: ReactNode;
-};
-
-type PokemonListContext = {
-  pokemonList: PokemonDTO[];
-  setPokemonList: React.Dispatch<React.SetStateAction<PokemonDTO[]>>;
-  loading: boolean;
-  pokemonLength: number;
-};
+import {
+  alolaList,
+  galarList,
+  normalList,
+  hisuiList,
+  nameFromChainList,
+  listForApiMisleadingEvolution,
+  correctGalarPokemonsTree,
+} from '@/common/utils/evolutions';
+// import { validatePokemonEvolutions } from '@/common/utils/validation';
 
 const defaultValue: PokemonListContext = {
   pokemonList: [],
@@ -43,77 +43,194 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
   const [loading, setLoading] = useState(false);
   const pokemonDatabase = usePokemonDatabase();
 
-  const saveImage = async (imageUrl: string, imageName: string) => {
-    try {
-      // Define the path where the image will be saved
-      const fileUri = `${FileSystem.documentDirectory}${imageName}.png`;
+  const checkAlolaEvolution = useCallback((name: string) => {
+    const hasAlolaEvolution = alolaList[name];
 
-      // Download the image
-      const downloadResumable = FileSystem.createDownloadResumable(
-        imageUrl,
-        fileUri,
-      );
+    if (!hasAlolaEvolution) return [];
 
-      const { uri } = await downloadResumable.downloadAsync();
+    return hasAlolaEvolution;
+  }, []);
 
-      return uri; // Return the local URI for future use
-    } catch (error) {
-      return null;
+  const checkGalarEvolution = useCallback((name: string) => {
+    const hasGalarEvolution = galarList[name];
+
+    if (!hasGalarEvolution) {
+      return [];
     }
-  };
 
-  const getPokemonEvolutionChain = useCallback(
+    return hasGalarEvolution;
+  }, []);
+
+  const checkNormalEvolution = useCallback((name: string) => {
+    const hasNormalEvolution = normalList[name];
+
+    if (!hasNormalEvolution) {
+      return [];
+    }
+
+    return hasNormalEvolution;
+  }, []);
+
+  const checkHisuiEvolution = useCallback((name: string) => {
+    const hasHisuilEvolution = hisuiList[name];
+
+    if (!hasHisuilEvolution) {
+      return [];
+    }
+
+    return hasHisuilEvolution;
+  }, []);
+
+  const extractEvolutions = useCallback((chain: any, name: string) => {
+    if (listForApiMisleadingEvolution[name]) {
+      return [];
+    } else {
+      const evolutionMap: Record<string, string[]> = {};
+
+      function traverse(node: any, previous: string[] = []) {
+        const name = node.species.name;
+
+        // Initialize entry for this Pokémon if not present
+        if (!evolutionMap[name]) {
+          evolutionMap[name] = [];
+        }
+
+        previous.forEach(prev => {
+          if (!evolutionMap[name].includes(prev)) {
+            evolutionMap[name].push(prev);
+          }
+          if (!evolutionMap[prev].includes(name)) {
+            evolutionMap[prev].push(name);
+          }
+        });
+
+        // Traverse evolutions
+        node.evolves_to.forEach((evolution: any) =>
+          traverse(evolution, [...previous, name]),
+        );
+      }
+
+      traverse(chain);
+
+      // Retrieve evolution tree that matches the pokemon name
+      const chainName = nameFromChainList[name] || name;
+
+      // console.log('Name: ' + JSON.stringify(name));
+
+      // console.log(
+      //   'evolutionMap retrieveCorrectPokemonName: ' +
+      //     JSON.stringify(evolutionMap[chainName], undefined, 2),
+      // );
+
+      return evolutionMap[chainName];
+    }
+  }, []);
+
+  const getAllEvolutions = useCallback(
+    (evolutions: string[], name: string) => {
+      const isAlolaPokemon = name.includes('alola');
+      const isGalarPokemon = name.includes('galar');
+      const isHisuiPokemon = name.includes('hisui');
+
+      const alolaEvolutionsList = checkAlolaEvolution(name);
+
+      const galarEvolutionsList = checkGalarEvolution(name);
+
+      const normalEvolutionsList = checkNormalEvolution(name);
+
+      const hisuiEvolutionsList = checkHisuiEvolution(name);
+
+      const apiEvolutionList =
+        isAlolaPokemon ||
+        isGalarPokemon ||
+        isHisuiPokemon ||
+        normalEvolutionsList.length > 0
+          ? []
+          : evolutions;
+
+      // console.log(
+      //   'normalEvolutionsList: ' +
+      //     JSON.stringify(normalEvolutionsList.length, undefined, 2),
+      // );
+      // console.log('Evolutions: ' + JSON.stringify(evolutions, undefined, 2));
+
+      // console.log(
+      //   'alolaEvolutionsList: ' +
+      //     JSON.stringify(alolaEvolutionsList, undefined, 2),
+      // );
+      // console.log(
+      //   'galarEvolutionsList: ' +
+      //     JSON.stringify(galarEvolutionsList, undefined, 2),
+      // );
+
+      // console.log(
+      //   'apiEvolutionList: ' + JSON.stringify(apiEvolutionList, undefined, 2),
+      // );
+
+      // console.log(
+      //   'normalEvolutionsList: ' +
+      //     JSON.stringify(normalEvolutionsList, undefined, 2),
+      // );
+      // console.log(
+      //   'hisuiEvolutionsList: ' +
+      //     JSON.stringify(hisuiEvolutionsList, undefined, 2),
+      // );
+
+      const joinChecks = [
+        ...alolaEvolutionsList,
+        ...galarEvolutionsList,
+        ...normalEvolutionsList.filter(name => name !== ''),
+        ...hisuiEvolutionsList,
+        ...apiEvolutionList,
+      ];
+
+      // console.log('Poke: ' + JSON.stringify(name));
+
+      // console.log('Join checks: ' + JSON.stringify(joinChecks, undefined, 2));
+
+      return joinChecks;
+    },
+    [
+      checkAlolaEvolution,
+      checkGalarEvolution,
+      checkHisuiEvolution,
+      checkNormalEvolution,
+    ],
+  );
+
+  const getEvolutionChain = useCallback(
     async (name: string, id: number) => {
       try {
-        const speciesResponse = await api.get<PokemonSpeciesDTO>(
-          `/pokemon-species/${id}`,
+        const { data } = await api.get<PokemonSpeciesDTO>(
+          `pokemon-species/${id}`,
         );
 
-        const { url } = speciesResponse.data.evolution_chain;
-
-        const evolutionResponse = await api.get<PokemonEvolutionChainDTO>(url);
+        const evolutionResponse = await api.get<PokemonEvolutionChainDTO>(
+          data.evolution_chain.url,
+        );
 
         const { chain } = evolutionResponse.data;
 
-        let evolutions: string[] = [];
+        // Join arrays and remove duplicates
+        const evolutions = extractEvolutions(chain, name);
 
-        let currentEvolution = chain;
+        const allEvolutions = getAllEvolutions(
+          correctGalarPokemonsTree[name] || evolutions,
+          name,
+        );
 
-        while (currentEvolution) {
-          const { evolves_to, species } = currentEvolution;
-
-          const noDuplicates = evolutions.find(
-            evolution => evolution === species.name,
-          );
-
-          if (species.name !== name && species.name !== noDuplicates) {
-            evolutions.push(species.name);
-          }
-
-          if (evolves_to.length === 0) {
-            break;
-          }
-
-          if (evolves_to.length > 1) {
-            const evolvesToFiltered = evolves_to.map(
-              evolution => evolution.species.name,
-            );
-
-            evolutions.splice(0, evolutions.length);
-
-            evolutions = [...evolvesToFiltered];
-          }
-
-          currentEvolution = currentEvolution.evolves_to[0];
-        }
-
-        return evolutions;
+        return allEvolutions;
       } catch (error) {
+        console.log(
+          id + ' Error pokemon: ' + JSON.stringify(name, undefined, 2),
+        );
+
         console.error('Error fetching evolution chain: ', error);
+
         return [];
       }
     },
-    [],
+    [extractEvolutions, getAllEvolutions],
   );
 
   const fetchAllPokemon = useCallback(async () => {
@@ -156,8 +273,8 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
             } = pokemonInfo.data;
 
             const statNameMap: Record<string, string> = {
-              'special-attack': 'Sp. Attack',
-              'special-defense': 'Sp. Defense',
+              'special-attack': 'Sp. Atk',
+              'special-defense': 'Sp. Def',
             };
 
             const formattedStatsName = stats.map(statItem => {
@@ -196,7 +313,9 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
             if (!imagePath) return null;
 
             const pokemonEvolutions =
-              id > 1025 ? [] : await getPokemonEvolutionChain(name, id);
+              id > 1025
+                ? getAllEvolutions([], name)
+                : await getEvolutionChain(name, id);
 
             const dataToShow = {
               ...pokemonInfo.data,
@@ -241,13 +360,22 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
         (item): item is PokemonDTO => item !== null,
       );
 
+      // let correctPokemonEvolutions = 0;
+
+      // validPokemonList.forEach(pokemon => {
+      //   correctPokemonEvolutions =
+      //     correctPokemonEvolutions + validatePokemonEvolutions(pokemon);
+      // });
+
+      // console.log('Pokemons validated: ' + correctPokemonEvolutions);
+
       setPokemonList(validPokemonList);
     } catch (error) {
       Alert.alert('Error', 'Could not fetch all pokémons');
     } finally {
       setLoading(false);
     }
-  }, [getPokemonEvolutionChain, pokemonDatabase]);
+  }, [getAllEvolutions, getEvolutionChain, pokemonDatabase]);
 
   const getPokemonsList = useCallback(async (): Promise<void> => {
     try {

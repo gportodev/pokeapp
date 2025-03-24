@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import api from '@/services/api';
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, Alert } from 'react-native';
 import { PokemonDTO } from '@/dtos/PokemonDTO';
 import styles from './styles';
 
 import { PokemonSpeciesDTO } from '@/dtos/PokemonSpeciesDTO';
 import { Pokemon } from '@/components/Pokemon';
 import { usePokemon } from '@/context/pokemons';
+import { Loader } from '@/components/Loader';
 
 type FormsProps = {
   pokemon: PokemonDTO;
@@ -16,26 +17,26 @@ type FormsProps = {
 function Forms({ pokemon, onPress }: FormsProps): JSX.Element {
   const { pokemonList } = usePokemon();
   const [forms, setForms] = useState<PokemonDTO[]>([]);
-  const { name, id, is_default } = pokemon;
+  const { name, id, is_default, displayName, species } = pokemon;
+  const [loading, setLoading] = useState(false);
 
   // Catch pokemons forms to not default forms
   // Ex: ogerpon
   const getNotDefaultPokemonForms = useCallback(() => {
-    const normalizedName = name.split('-')[0].trim();
-
     const pokemonForms = pokemonList
-      .filter(pokemon =>
-        pokemon.name.trim().toLowerCase().includes(normalizedName),
-      )
-      .filter(pokemon => pokemon.name !== name);
-
-    console.log(JSON.stringify(pokemonForms, undefined, 2));
+      .filter(pokemon => {
+        return species.name === pokemon.species.name;
+      })
+      .filter(pokemon => pokemon.displayName !== displayName);
 
     setForms(pokemonForms);
-  }, [name, pokemonList]);
+    setLoading(false);
+  }, [displayName, pokemonList, species.name]);
 
   const getDefaultPokemonForms = useCallback(async () => {
     try {
+      setLoading(true);
+
       const speciesResponse = await api.get<PokemonSpeciesDTO>(
         `/pokemon-species/${id}`,
       );
@@ -48,14 +49,10 @@ function Forms({ pokemon, onPress }: FormsProps): JSX.Element {
         }))
         .filter(pokemonVariety => pokemonVariety.name !== name);
 
-      console.log(JSON.stringify(forms, undefined, 2));
-
-      if (!forms) return [];
-
       if (forms.length > 0) {
         const pokemonForms = forms.map(formName => {
-          const findPokemon = pokemonList.find(pokemon =>
-            pokemon.name.includes(formName.name),
+          const findPokemon = pokemonList.find(
+            pokemon => pokemon.name === formName.name,
           );
 
           if (findPokemon) {
@@ -68,8 +65,9 @@ function Forms({ pokemon, onPress }: FormsProps): JSX.Element {
         setForms(pokemonForms.filter(Boolean) as PokemonDTO[]);
       }
     } catch (error) {
-      console.error('Error fetching forms: ', error);
-      return [];
+      Alert.alert('Error', 'Could not fetching forms');
+    } finally {
+      setLoading(false);
     }
   }, [id, name, pokemonList]);
 
@@ -83,7 +81,7 @@ function Forms({ pokemon, onPress }: FormsProps): JSX.Element {
   const renderEmpty = useMemo(() => {
     return (
       <View>
-        <Text>No forms found!</Text>
+        <Text>No forms found</Text>
       </View>
     );
   }, []);
@@ -102,12 +100,19 @@ function Forms({ pokemon, onPress }: FormsProps): JSX.Element {
     [forms, renderEmpty, renderItem],
   );
 
+  const renderLoading = useMemo(
+    () => (
+      <View>
+        <Loader height={70} width={70} loadingText="Loading forms..." />
+      </View>
+    ),
+    [],
+  );
+
   useEffect(() => {
     if (is_default) {
       getDefaultPokemonForms();
-    }
-
-    if (!is_default) {
+    } else {
       getNotDefaultPokemonForms();
     }
   }, [getDefaultPokemonForms, getNotDefaultPokemonForms, is_default]);
@@ -116,7 +121,7 @@ function Forms({ pokemon, onPress }: FormsProps): JSX.Element {
     <View style={styles.fourthBlockInfoContainer}>
       <Text style={styles.title}>Forms</Text>
 
-      {renderForms}
+      {loading ? renderLoading : renderForms}
     </View>
   );
 }

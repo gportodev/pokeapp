@@ -20,11 +20,12 @@ function Pokemons({ onPress }: PokemonsProps) {
 
   const filteredPokemons = useMemo(() => {
     return pokemonList.filter(pokemon => {
+      const { id, displayName } = pokemon;
+
       const searchText = wantedPokemon.toLowerCase();
 
       return (
-        pokemon.name.toLowerCase().includes(searchText) ||
-        pokemon.id.toString().includes(searchText)
+        displayName.includes(searchText) || id.toString().includes(searchText)
       );
     });
   }, [pokemonList, wantedPokemon]);

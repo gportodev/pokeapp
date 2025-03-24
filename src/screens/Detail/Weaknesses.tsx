@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import styles from './styles';
-import { getTagFromType, PokemonType } from '@/common/utils/pokemon';
+import { getTagFromType } from '@/common/utils/tag';
+import { PokemonType } from '@/common/utils/types';
 
 type WeaknessesProps = {
   weaknesses: string[];

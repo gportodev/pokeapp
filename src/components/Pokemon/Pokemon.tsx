@@ -1,12 +1,11 @@
 import React, { memo, useMemo } from 'react';
 import { TouchableOpacity, Text, View, Image } from 'react-native';
 import styles from './styles';
-import {
-  getTagFromType,
-  getIconFromType,
-  PokemonType,
-} from '@/common/utils/pokemon';
+
 import { PokemonDTO } from '@/dtos/PokemonDTO';
+import { PokemonType } from '@/common/utils/types';
+import { getIconFromType } from '@/common/utils/icon';
+import { getTagFromType } from '@/common/utils/tag';
 
 type PokemonProps = {
   item: PokemonDTO;

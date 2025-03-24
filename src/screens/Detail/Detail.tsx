@@ -13,6 +13,7 @@ import { Types } from './Types';
 import { Evolutions } from './Evolutions';
 import { PokemonDTO } from '@/dtos/PokemonDTO';
 import { Forms } from './Forms';
+import { Abilities } from './Abilities';
 
 function Detail({ navigation, route }: DetailProps): JSX.Element {
   const { item } = route.params;
@@ -52,11 +53,9 @@ function Detail({ navigation, route }: DetailProps): JSX.Element {
 
           <Types types={types} />
 
-          <Characteristics
-            height={height}
-            weight={weight}
-            abilities={abilities}
-          />
+          <Characteristics height={height} weight={weight} />
+
+          <Abilities abilities={abilities} />
 
           <Weaknesses weaknesses={weaknesses} />
 

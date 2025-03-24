@@ -91,6 +91,17 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-end',
   },
+  tagAbilityContainer: {
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderWidth: 1,
+    borderRadius: 4,
+  },
+  tagAbilityText: {
+    fontSize: 14,
+    fontFamily: Fonts.montserrat_semibold,
+    textTransform: 'capitalize',
+  },
   tagTypeContainer: {
     width: 80,
     height: 24,
@@ -107,7 +118,6 @@ export default StyleSheet.create({
     paddingTop: 32,
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 16,
   },
   firstBlockInfoLabelText: {
     fontSize: 14,

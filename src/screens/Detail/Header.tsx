@@ -2,14 +2,13 @@ import React, { useMemo } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView, TouchableOpacity, View, Image } from 'react-native';
 import styles from './styles';
-import {
-  getCardFromType,
-  getIconFromType,
-  PokemonType,
-} from '@/common/utils/pokemon';
+
 import { PokemonDTO } from '@/dtos/PokemonDTO';
 import Ionicon from '@expo/vector-icons/Ionicons';
 import colors from '@/constants/colors';
+import { getIconFromType } from '@/common/utils/icon';
+import { PokemonType } from '@/common/utils/types';
+import { getCardFromType } from '@/common/utils/card';
 
 type HeaderProps = {
   item: PokemonDTO;

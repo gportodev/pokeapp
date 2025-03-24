@@ -29,3 +29,7 @@ export async function initializeDatabase(database: SQLite.SQLiteDatabase) {
     );
   `);
 }
+
+export async function clearDatabase() {
+  await SQLite.deleteDatabaseAsync('pokemon.db');
+}

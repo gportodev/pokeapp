@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { View, Text, FlatList } from 'react-native';
 import { PokemonDTO } from '@/dtos/PokemonDTO';
 import styles from './styles';
@@ -13,38 +13,8 @@ type EvolutionsProps = {
 
 function Evolutions({ pokemon, onPress }: EvolutionsProps): JSX.Element {
   const { pokemonList } = usePokemon();
-  const { name, evolutions } = pokemon;
-
-  const pokemonEvolutions = useMemo(() => {
-    if (!evolutions) return [];
-
-    if (evolutions.length > 0) {
-      const pokemonEvolutions = evolutions
-        .map(evolutionName => {
-          const findPokemon = pokemonList.find(pokemon =>
-            pokemon.name.includes(evolutionName),
-          );
-
-          if (findPokemon) {
-            return findPokemon;
-          }
-
-          return;
-        })
-        .filter(pokemon => pokemon.name !== name);
-
-      return pokemonEvolutions.filter(Boolean) as PokemonDTO[];
-    }
-
-    //Evolutions with same name
-    if (evolutions.length === 1) {
-      const findPokemon = pokemonList.filter(pokemon =>
-        pokemon.name.includes(evolutions[0]),
-      );
-
-      return findPokemon.filter(Boolean) as PokemonDTO[];
-    }
-  }, [evolutions, name, pokemonList]);
+  const { evolutions } = pokemon;
+  const [list, setList] = useState<PokemonDTO[]>([]);
 
   const renderItem = useCallback(
     ({ item }: { item: PokemonDTO }) => {
@@ -56,7 +26,7 @@ function Evolutions({ pokemon, onPress }: EvolutionsProps): JSX.Element {
   const renderEmpty = useMemo(() => {
     return (
       <View>
-        <Text>No evolutions found!</Text>
+        <Text>No evolutions found</Text>
       </View>
     );
   }, []);
@@ -64,16 +34,34 @@ function Evolutions({ pokemon, onPress }: EvolutionsProps): JSX.Element {
   const renderEvolutions = useMemo(
     () => (
       <FlatList
-        data={pokemonEvolutions}
+        data={list}
         renderItem={renderItem}
+        ListEmptyComponent={renderEmpty}
         contentContainerStyle={styles.evolutionContainer}
         keyExtractor={(item: PokemonDTO) => item.id.toString()}
         horizontal
-        ListEmptyComponent={renderEmpty}
       />
     ),
-    [pokemonEvolutions, renderEmpty, renderItem],
+    [list, renderEmpty, renderItem],
   );
+
+  useEffect(() => {
+    if (evolutions && evolutions?.length > 0) {
+      const result = evolutions
+        .map(evolution => {
+          const findEvolution = pokemonList.find(
+            pokemon => pokemon.name === evolution,
+          );
+
+          if (!findEvolution) return null;
+
+          return findEvolution;
+        })
+        .filter(Boolean) as PokemonDTO[];
+
+      setList(result);
+    }
+  }, [evolutions, pokemonList]);
 
   return (
     <View style={styles.fourthBlockInfoContainer}>
