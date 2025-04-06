@@ -21,4 +21,9 @@ export default StyleSheet.create({
     color: colors.gray_bold,
     textAlign: 'center',
   },
+  headerView: {
+    // backgroundColor: 'blue',
+    gap: 34,
+    paddingVertical: 30,
+  },
 });

@@ -6,6 +6,7 @@ import { PokemonDTO } from '@/dtos/PokemonDTO';
 import { PokemonType } from '@/common/utils/types';
 import { getIconFromType } from '@/common/utils/icon';
 import { getTagFromType } from '@/common/utils/tag';
+import { useTheme } from '@/context/theme';
 
 type PokemonProps = {
   item: PokemonDTO;
@@ -14,6 +15,7 @@ type PokemonProps = {
 
 function Pokemon({ item, onPress }: PokemonProps): JSX.Element {
   const { id, displayName, avatar, types } = item;
+  const { theme } = useTheme();
 
   const pokemonTypes = useMemo(() => {
     if (!types || types.length === 0) return null;
@@ -28,7 +30,16 @@ function Pokemon({ item, onPress }: PokemonProps): JSX.Element {
   }, [types]);
 
   return (
-    <TouchableOpacity style={styles.container} onPress={() => onPress(item)}>
+    <TouchableOpacity
+      style={[
+        styles.container,
+        {
+          backgroundColor: theme.colors.customCard.background,
+          elevation: theme.colors.customCard.elevation,
+        },
+      ]}
+      onPress={() => onPress(item)}
+    >
       {avatar && (
         <View
           style={[
@@ -45,9 +56,27 @@ function Pokemon({ item, onPress }: PokemonProps): JSX.Element {
       )}
 
       <View style={styles.content}>
-        <Text style={styles.data}>#{id}</Text>
+        <Text
+          style={[
+            styles.data,
+            {
+              color: theme.colors.text,
+            },
+          ]}
+        >
+          #{id}
+        </Text>
 
-        <Text style={styles.data}>{displayName}</Text>
+        <Text
+          style={[
+            styles.data,
+            {
+              color: theme.colors.text,
+            },
+          ]}
+        >
+          {displayName}
+        </Text>
 
         <View style={styles.typeContainer}>{pokemonTypes}</View>
       </View>

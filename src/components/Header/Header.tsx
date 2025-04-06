@@ -2,29 +2,28 @@ import React from 'react';
 
 import {
   View,
-  Text,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
+  TouchableOpacity,
 } from 'react-native';
 import styles from './styles';
 import { Input } from '../Input';
-import { PokeballIcon } from '@/assets/icons/Loader';
+import { MenuIcon } from '@/assets/icons/Loader';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { usePokemon } from '@/context/pokemons';
 
-type HeaderProps = {
-  value: string;
-  onChangeText: (value: string) => void;
-  pokemonLength: number;
-};
+import { useTheme } from '@/context/theme';
+import { useNavigation } from '@react-navigation/native';
+import { DrawerParamList } from '@/routes/types';
+import { DrawerNavigationProp } from '@react-navigation/drawer';
 
-function Header({
-  value,
-  onChangeText,
-  pokemonLength,
-}: HeaderProps): JSX.Element {
+function Header(): JSX.Element {
+  const { wantedPokemon, setWantedPokemon } = usePokemon();
   const insets = useSafeAreaInsets();
+  const { theme } = useTheme();
+  const navigation = useNavigation<DrawerNavigationProp<DrawerParamList>>();
 
   return (
     <KeyboardAvoidingView
@@ -36,14 +35,20 @@ function Header({
             styles.header,
             {
               paddingTop: insets.top * 2,
+              backgroundColor: theme.colors.header.background,
+              borderBottomColor: theme.colors.header.borderBottomColor,
             },
           ]}
         >
-          <Input wantedPokemon={value} setWantedPokemon={onChangeText} />
+          <View style={styles.content}>
+            <TouchableOpacity onPress={() => navigation.openDrawer()}>
+              <MenuIcon color={theme.colors.text} />
+            </TouchableOpacity>
 
-          <View style={styles.infoContainer}>
-            <PokeballIcon />
-            <Text style={styles.infoText}>{pokemonLength} Pokémons</Text>
+            <Input
+              wantedPokemon={wantedPokemon}
+              setWantedPokemon={setWantedPokemon}
+            />
           </View>
         </View>
       </TouchableWithoutFeedback>

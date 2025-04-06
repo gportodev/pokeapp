@@ -14,9 +14,20 @@ import { Evolutions } from './Evolutions';
 import { PokemonDTO } from '@/dtos/PokemonDTO';
 import { Forms } from './Forms';
 import { Abilities } from './Abilities';
+import { useTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
+import { useTheme } from '@/context/theme';
+
+export type Translate = {
+  translate: TFunction<'translation', undefined>;
+};
 
 function Detail({ navigation, route }: DetailProps): JSX.Element {
   const { item } = route.params;
+  const { theme } = useTheme();
+  const { t } = useTranslation();
+
+  const themeMode = theme.colors.screen.detail.text;
 
   const {
     id,
@@ -40,31 +51,79 @@ function Detail({ navigation, route }: DetailProps): JSX.Element {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[
+        styles.container,
+        {
+          backgroundColor: theme.colors.background,
+        },
+      ]}
+    >
       <ScrollView showsVerticalScrollIndicator={false}>
         <Header item={item} onPress={goBack} />
 
         <View style={styles.infoContainer}>
           <View style={styles.infoHeaderContainer}>
-            <Text style={styles.infoHeaderId}>{'#' + id.toString()}</Text>
+            <Text
+              style={[
+                styles.infoHeaderId,
+                {
+                  color: theme.colors.screen.detail.id,
+                },
+              ]}
+            >
+              {'#' + id.toString()}
+            </Text>
 
-            <Text style={styles.infoHeaderName}>{displayName}</Text>
+            <Text
+              style={[
+                styles.infoHeaderName,
+                {
+                  color: themeMode,
+                },
+              ]}
+            >
+              {displayName}
+            </Text>
           </View>
 
-          <Types types={types} />
+          <Types types={types} translate={t} />
 
-          <Characteristics height={height} weight={weight} />
+          <Characteristics
+            height={height}
+            weight={weight}
+            themeColor={themeMode}
+            translate={t}
+          />
 
-          <Abilities abilities={abilities} />
+          <Abilities
+            abilities={abilities}
+            themeColor={themeMode}
+            translate={t}
+          />
 
-          <Weaknesses weaknesses={weaknesses} />
+          <Weaknesses
+            weaknesses={weaknesses}
+            themeColor={themeMode}
+            translate={t}
+          />
 
-          <Stats stats={stats} />
+          <Stats stats={stats} themeMode={themeMode} translate={t} />
         </View>
 
-        <Evolutions pokemon={item} onPress={onPress} />
+        <Evolutions
+          pokemon={item}
+          onPress={onPress}
+          themeColor={themeMode}
+          translate={t}
+        />
 
-        <Forms pokemon={item} onPress={onPress} />
+        <Forms
+          pokemon={item}
+          onPress={onPress}
+          themeColor={themeMode}
+          translate={t}
+        />
       </ScrollView>
     </SafeAreaView>
   );

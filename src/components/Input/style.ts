@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   container: {
+    width: '95%',
     height: 56,
     justifyContent: 'center',
     backgroundColor: colors.white,
@@ -18,10 +19,10 @@ export default StyleSheet.create({
     paddingLeft: 50,
   },
   icon: {
-    backgroundColor: colors.pastel_blue,
+    // backgroundColor: colors.pastel_blue,
     width: 42,
     height: 42,
-    borderRadius: 100,
+    // borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'absolute',

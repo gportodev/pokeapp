@@ -30,7 +30,7 @@ module.exports = {
       },
     },
     web: {},
-    plugins: ['expo-asset', 'expo-font'],
+    plugins: ['expo-asset', 'expo-font', 'expo-localization'],
     extra: {
       eas: {
         projectId: 'ee361421-8b4b-4ead-b120-bf0a6dc03140',
@@ -38,5 +38,6 @@ module.exports = {
     },
     newArchEnabled: true,
     jsEngine: 'hermes',
+    userInterfaceStyle: 'automatic',
   },
 };

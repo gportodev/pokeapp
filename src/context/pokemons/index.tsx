@@ -30,9 +30,11 @@ import {
 
 const defaultValue: PokemonListContext = {
   pokemonList: [],
+  setPokemonList: () => {},
   loading: false,
   pokemonLength: 0,
-  setPokemonList: () => {},
+  wantedPokemon: '',
+  setWantedPokemon: () => {},
 };
 
 const PokemonContext = createContext(defaultValue);
@@ -41,6 +43,8 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
   const [pokemonList, setPokemonList] = useState<PokemonDTO[]>([]);
   const [pokemonLength, setPokemonLength] = useState<number>(0);
   const [loading, setLoading] = useState(false);
+  const [wantedPokemon, setWantedPokemon] = useState('');
+
   const pokemonDatabase = usePokemonDatabase();
 
   const checkAlolaEvolution = useCallback((name: string) => {
@@ -456,7 +460,14 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
 
   return (
     <PokemonContext.Provider
-      value={{ pokemonList, loading, pokemonLength, setPokemonList }}
+      value={{
+        pokemonList,
+        loading,
+        pokemonLength,
+        setPokemonList,
+        wantedPokemon,
+        setWantedPokemon,
+      }}
     >
       {children}
     </PokemonContext.Provider>

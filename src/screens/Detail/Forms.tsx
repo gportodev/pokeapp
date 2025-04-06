@@ -8,13 +8,20 @@ import { PokemonSpeciesDTO } from '@/dtos/PokemonSpeciesDTO';
 import { Pokemon } from '@/components/Pokemon';
 import { usePokemon } from '@/context/pokemons';
 import { Loader } from '@/components/Loader';
+import { Translate } from '.';
 
-type FormsProps = {
+type FormsProps = Translate & {
   pokemon: PokemonDTO;
   onPress: (pokemon: PokemonDTO) => void;
+  themeColor: string;
 };
 
-function Forms({ pokemon, onPress }: FormsProps): JSX.Element {
+function Forms({
+  pokemon,
+  onPress,
+  themeColor,
+  translate,
+}: FormsProps): JSX.Element {
   const { pokemonList } = usePokemon();
   const [forms, setForms] = useState<PokemonDTO[]>([]);
   const { name, id, is_default, displayName, species } = pokemon;
@@ -81,10 +88,16 @@ function Forms({ pokemon, onPress }: FormsProps): JSX.Element {
   const renderEmpty = useMemo(() => {
     return (
       <View>
-        <Text>No forms found</Text>
+        <Text
+          style={{
+            color: themeColor,
+          }}
+        >
+          {translate('detail.forms.error')}
+        </Text>
       </View>
     );
-  }, []);
+  }, [themeColor, translate]);
 
   const renderForms = useMemo(
     () => (
@@ -119,7 +132,16 @@ function Forms({ pokemon, onPress }: FormsProps): JSX.Element {
 
   return (
     <View style={styles.fourthBlockInfoContainer}>
-      <Text style={styles.title}>Forms</Text>
+      <Text
+        style={[
+          styles.title,
+          {
+            color: themeColor,
+          },
+        ]}
+      >
+        {translate('detail.forms.title')}
+      </Text>
 
       {loading ? renderLoading : renderForms}
     </View>

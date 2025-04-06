@@ -3,12 +3,15 @@ import styles from './styles';
 import { View, Text } from 'react-native';
 import { PokemonAbility } from '@/dtos/PokemonAbilityDTO';
 import { formatNameToShow } from '@/common/utils/format';
+import { Translate } from './Detail';
+import { getAbilityTranslation } from '@/common/utils/abilities';
 
-type AbilitiesProps = {
+type AbilitiesProps = Translate & {
   abilities: PokemonAbility[];
+  themeColor: string;
 };
 
-function Abilities({ abilities }: AbilitiesProps) {
+function Abilities({ abilities, themeColor, translate }: AbilitiesProps) {
   return (
     <View
       style={{
@@ -18,7 +21,16 @@ function Abilities({ abilities }: AbilitiesProps) {
         alignItems: 'center',
       }}
     >
-      <Text style={styles.title}>Abilities</Text>
+      <Text
+        style={[
+          styles.title,
+          {
+            color: themeColor,
+          },
+        ]}
+      >
+        {translate('detail.abilities.title')}
+      </Text>
 
       <View
         style={{
@@ -34,9 +46,24 @@ function Abilities({ abilities }: AbilitiesProps) {
             const { name } = ability;
 
             return (
-              <View key={name} style={styles.tagAbilityContainer}>
-                <Text style={styles.tagAbilityText}>
-                  {formatNameToShow(name)}
+              <View
+                key={name}
+                style={[
+                  styles.tagAbilityContainer,
+                  {
+                    borderColor: themeColor,
+                  },
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.tagAbilityText,
+                    {
+                      color: themeColor,
+                    },
+                  ]}
+                >
+                  {formatNameToShow(translate(getAbilityTranslation(name)))}
                 </Text>
               </View>
             );

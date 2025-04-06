@@ -9,9 +9,106 @@ export default {
   dark_grayish: '#2F3133',
   pink: '#F02F8C',
   greyish_blue: '#EFF3F6',
-  pastel_blue: 'rgba(158, 185, 225, 0.1)',
+  pastel_blue: 'hsla(216, 52.80%, 75.10%, 0.10)',
   dark_blue: '#3E75C3',
   soft_muted_greyish_blue: '#A0AFBA',
+
+  //For app theme
+
+  theme: {
+    light: {
+      background: '#FFFFFF',
+      header: {
+        background: '#EFF3F6',
+        borderBottomColor: '#EFF3F6',
+      },
+      text: '#2F3133',
+      input: {
+        background: '#FFFFFF',
+        borderColor: '#EFF3F6',
+        text: '#2F3133',
+        placeHolderTextColor: '#A0AFBA',
+      },
+      filter: {
+        placeholderText: '#7A7D80',
+        listText: '#2F3133',
+      },
+      icon: {
+        default: '#2F3133',
+        search: '#3E75C3',
+      },
+      customCard: {
+        background: '#FFFFFF',
+        elevation: 5,
+      },
+      drawer: {
+        background: '#FFFFFF',
+        text: '#2F3133',
+      },
+      screen: {
+        detail: {
+          id: '#7A7D80',
+          text: '#2F3133',
+        },
+        settings: {
+          background: '#FFFFFF',
+          header: {
+            background: '#EFF3F6',
+          },
+          text: '#2F3133',
+          dropdown: {
+            activeItem: '#EFF3F6',
+          },
+        },
+      },
+    },
+    dark: {
+      background: '#121212',
+      header: {
+        background: '#121212',
+        borderBottomColor: '#121212',
+      },
+      text: '#FFFFFF',
+      input: {
+        background: '#1E1E1E',
+        borderColor: '#2F3133',
+        text: '#FFFFFF',
+        placeHolderTextColor: '#FFFFFF',
+      },
+      filter: {
+        placeholderText: '#7A7D80',
+        listText: '#FFFFFF',
+      },
+      icon: {
+        default: '#FFFFFF',
+        search: '#FFFFFF',
+      },
+      customCard: {
+        background: '#1E1E1E',
+        elevation: 0,
+      },
+      drawer: {
+        background: '#1E1E1E',
+        text: '#FFFFFF',
+      },
+      screen: {
+        detail: {
+          id: '#E0E0E0',
+          text: '#FFFFFF',
+        },
+        settings: {
+          background: '#1E1E1E',
+          header: {
+            background: '#1E1E1E',
+          },
+          text: '#FFFFFF',
+          dropdown: {
+            activeItem: '#B0B0B0',
+          },
+        },
+      },
+    },
+  },
 
   //For pokemon background tag
   strong_orange_red_10: 'rgba(233, 99, 3, 0.1)', // Strong Red-Orange

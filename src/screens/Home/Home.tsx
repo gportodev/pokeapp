@@ -6,9 +6,17 @@ import { SafeAreaView } from 'react-native';
 import { HomeProps } from '@/routes/types';
 import { PokemonDTO } from '@/dtos/PokemonDTO';
 import { StatusBar } from 'expo-status-bar';
-import colors from '@/constants/colors';
+import { Header } from '@/components/Header';
+import { Loader } from '@/components/Loader';
+import { useTranslation } from 'react-i18next';
+import { usePokemon } from '@/context/pokemons';
+import { useTheme } from '@react-navigation/native';
 
 function Home({ navigation }: HomeProps): JSX.Element {
+  const { loading } = usePokemon();
+  const { t } = useTranslation();
+  const { colors } = useTheme();
+
   const onPress = useCallback(
     (item: PokemonDTO) => {
       navigation.navigate('Detail', { item });
@@ -16,15 +24,20 @@ function Home({ navigation }: HomeProps): JSX.Element {
     [navigation],
   );
 
+  if (loading) {
+    return <Loader fullScreen loadingText={t('home.loading')} />;
+  }
+
   return (
     <SafeAreaProvider>
       <SafeAreaView
         style={{
           flex: 1,
-          backgroundColor: colors.white,
+          backgroundColor: colors.background,
         }}
       >
-        <StatusBar style="dark" />
+        <StatusBar style="auto" />
+        <Header />
         <Pokemons onPress={onPress} />
       </SafeAreaView>
     </SafeAreaProvider>
