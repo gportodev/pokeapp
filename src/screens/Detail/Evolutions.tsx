@@ -5,13 +5,20 @@ import styles from './styles';
 
 import { Pokemon } from '@/components/Pokemon';
 import { usePokemon } from '@/context/pokemons';
+import { Translate } from './Detail';
 
-type EvolutionsProps = {
+type EvolutionsProps = Translate & {
   pokemon: PokemonDTO;
   onPress: (pokemon: PokemonDTO) => void;
+  themeColor: string;
 };
 
-function Evolutions({ pokemon, onPress }: EvolutionsProps): JSX.Element {
+function Evolutions({
+  pokemon,
+  onPress,
+  themeColor,
+  translate,
+}: EvolutionsProps): JSX.Element {
   const { pokemonList } = usePokemon();
   const { evolutions } = pokemon;
   const [list, setList] = useState<PokemonDTO[]>([]);
@@ -26,10 +33,16 @@ function Evolutions({ pokemon, onPress }: EvolutionsProps): JSX.Element {
   const renderEmpty = useMemo(() => {
     return (
       <View>
-        <Text>No evolutions found</Text>
+        <Text
+          style={{
+            color: themeColor,
+          }}
+        >
+          {translate('detail.evolutions.none')}
+        </Text>
       </View>
     );
-  }, []);
+  }, [themeColor, translate]);
 
   const renderEvolutions = useMemo(
     () => (
@@ -65,7 +78,16 @@ function Evolutions({ pokemon, onPress }: EvolutionsProps): JSX.Element {
 
   return (
     <View style={styles.fourthBlockInfoContainer}>
-      <Text style={styles.title}>Family tree</Text>
+      <Text
+        style={[
+          styles.title,
+          {
+            color: themeColor,
+          },
+        ]}
+      >
+        {translate('detail.evolutions.title')}
+      </Text>
 
       {renderEvolutions}
     </View>

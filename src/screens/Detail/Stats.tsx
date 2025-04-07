@@ -4,24 +4,43 @@ import styles from './styles';
 import { View, Text } from 'react-native';
 import { ProgressBar } from '@/components/ProgressBar';
 import { PokemonStat } from '@/dtos/PokemonStatDTO';
+import { Translate } from './Detail';
+import { getStatTranslation } from '@/common/utils/stats';
 
-type StatsProps = {
+type StatsProps = Translate & {
   stats: PokemonStat[];
+  themeMode: string;
 };
 
-function Stats({ stats }: StatsProps): JSX.Element {
+function Stats({ stats, themeMode, translate }: StatsProps): JSX.Element {
   const renderColumnItem = useCallback(
     (label: string, value: number, columnIndex: number) => {
       switch (columnIndex) {
         case 0:
           return (
-            <Text key={label} style={styles.statLabel}>
-              {label}
+            <Text
+              key={label}
+              style={[
+                styles.statLabel,
+                {
+                  color: themeMode,
+                },
+              ]}
+            >
+              {translate(getStatTranslation(label))}
             </Text>
           );
         case 1:
           return (
-            <Text key={label} style={styles.statLabel}>
+            <Text
+              key={label}
+              style={[
+                styles.statLabel,
+                {
+                  color: themeMode,
+                },
+              ]}
+            >
               {value}
             </Text>
           );
@@ -42,7 +61,7 @@ function Stats({ stats }: StatsProps): JSX.Element {
           return null;
       }
     },
-    [],
+    [themeMode, translate],
   );
 
   const renderColumns = useCallback(() => {
@@ -51,7 +70,7 @@ function Stats({ stats }: StatsProps): JSX.Element {
       value: stat.base_stat,
     }));
 
-    const totalLabel = 'Total';
+    const totalLabel = translate('detail.stats.list.total');
     const totalValue = stats.reduce((sum, item) => sum + item.base_stat, 0);
 
     statsData.push({
@@ -70,11 +89,20 @@ function Stats({ stats }: StatsProps): JSX.Element {
         ))}
       </View>
     );
-  }, [stats, renderColumnItem]);
+  }, [stats, translate, renderColumnItem]);
 
   return (
     <View style={styles.thirdBlockInfoContainer}>
-      <Text style={styles.title}>Stats</Text>
+      <Text
+        style={[
+          styles.title,
+          {
+            color: themeMode,
+          },
+        ]}
+      >
+        {translate('detail.stats.title')}
+      </Text>
 
       {renderColumns()}
     </View>

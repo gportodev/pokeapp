@@ -1,5 +1,5 @@
 import { PokemonDTO } from '@/dtos/PokemonDTO';
-import { RouteProp } from '@react-navigation/native';
+import { NavigatorScreenParams, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 type StackParamList = {
@@ -7,6 +7,11 @@ type StackParamList = {
   Detail: {
     item: PokemonDTO;
   };
+};
+
+type DrawerParamList = {
+  Main: NavigatorScreenParams<StackParamList>;
+  Settings: undefined;
 };
 
 type HomeProps = {
@@ -18,4 +23,14 @@ type DetailProps = {
   route: RouteProp<StackParamList, 'Detail'>;
 };
 
-export { StackParamList, HomeProps, DetailProps };
+type SettingsProps = {
+  navigation: NativeStackNavigationProp<DrawerParamList, 'Settings'>;
+};
+
+export {
+  DrawerParamList,
+  StackParamList,
+  HomeProps,
+  DetailProps,
+  SettingsProps,
+};

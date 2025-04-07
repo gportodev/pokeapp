@@ -1,17 +1,28 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import styles from './styles';
-import { getTagFromType } from '@/common/utils/tag';
+import { getTagFromType, getTypeTranslation } from '@/common/utils/tag';
 import { PokemonType } from '@/common/utils/types';
+import { Translate } from './Detail';
 
-type WeaknessesProps = {
+type WeaknessesProps = Translate & {
   weaknesses: string[];
+  themeColor: string;
 };
 
-function Weaknesses({ weaknesses }: WeaknessesProps) {
+function Weaknesses({ weaknesses, themeColor, translate }: WeaknessesProps) {
   return (
     <View style={styles.secondBlockInfoContainer}>
-      <Text style={styles.title}>Weaknesses</Text>
+      <Text
+        style={[
+          styles.title,
+          {
+            color: themeColor,
+          },
+        ]}
+      >
+        {translate('detail.weaknesses')}
+      </Text>
 
       <View
         style={{
@@ -40,7 +51,7 @@ function Weaknesses({ weaknesses }: WeaknessesProps) {
                   },
                 ]}
               >
-                {weakness}
+                {translate(getTypeTranslation(weakness))}
               </Text>
             </View>
           );

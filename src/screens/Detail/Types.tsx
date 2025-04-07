@@ -2,14 +2,15 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import styles from './styles';
 import { PokemonTypeDTO } from '@/dtos/PokemonTypeDTO';
-import { getTagFromType } from '@/common/utils/tag';
+import { getTagFromType, getTypeTranslation } from '@/common/utils/tag';
 import { PokemonType } from '@/common/utils/types';
+import { Translate } from './Detail';
 
-type TypeProps = {
+type TypeProps = Translate & {
   types: PokemonTypeDTO[];
 };
 
-function Types({ types }: TypeProps) {
+function Types({ types, translate }: TypeProps) {
   return (
     <View style={styles.infoSubHeaderContainer}>
       {types.map(item => {
@@ -33,7 +34,7 @@ function Types({ types }: TypeProps) {
                 },
               ]}
             >
-              {type}
+              {translate(getTypeTranslation(type))}
             </Text>
           </View>
         );

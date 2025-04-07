@@ -7,36 +7,45 @@ import { PokemonDTO } from '@/dtos/PokemonDTO';
 import { FlatList, SafeAreaView } from 'react-native';
 import { View, Text } from 'react-native';
 import { usePokemon } from '@/context/pokemons';
-import { Loader } from '../Loader';
-import { Header } from '../Header';
+import { Filter } from '../Filter';
+import { PokeballIcon } from '@/assets/icons/Loader';
+import { Fonts } from '@/constants/fonts';
+import { useTheme } from '@/context/theme';
+import { useTranslation } from 'react-i18next';
 
 type PokemonsProps = {
   onPress: (item: PokemonDTO) => void;
 };
 
 function Pokemons({ onPress }: PokemonsProps) {
-  const { pokemonList, loading, pokemonLength } = usePokemon();
-  const [wantedPokemon, setWantedPokemon] = useState('');
+  const { pokemonList, wantedPokemon, pokemonLength } = usePokemon();
+  const { theme } = useTheme();
+  const { t } = useTranslation();
+  const [selectedFilter, setSelectedFilter] = useState('');
 
   const filteredPokemons = useMemo(() => {
+    const searchText = wantedPokemon.toLowerCase();
+
     return pokemonList.filter(pokemon => {
-      const { id, displayName } = pokemon;
+      const matchesType =
+        selectedFilter === '' ||
+        pokemon.types.some(item => item.type.name === selectedFilter);
 
-      const searchText = wantedPokemon.toLowerCase();
+      const matchesSearch =
+        pokemon.displayName.includes(searchText) ||
+        pokemon.displayId.toString().includes(searchText);
 
-      return (
-        displayName.includes(searchText) || id.toString().includes(searchText)
-      );
+      return matchesType && matchesSearch;
     });
-  }, [pokemonList, wantedPokemon]);
+  }, [pokemonList, selectedFilter, wantedPokemon]);
 
-  const renderEmpty = useMemo(() => {
+  const renderEmpty = () => {
     return (
       <View>
-        <Text>Empty pokemon list!</Text>
+        <Text>{t('list.error')}</Text>
       </View>
     );
-  }, []);
+  };
 
   const renderItem = useCallback(
     ({ item }: { item: PokemonDTO }) => {
@@ -45,32 +54,44 @@ function Pokemons({ onPress }: PokemonsProps) {
     [onPress],
   );
 
-  if (loading) {
-    return (
-      <SafeAreaView style={styles.loadingView}>
-        <Loader />
-
-        <Text style={styles.loadingText}>Loading pokemons...</Text>
-      </SafeAreaView>
-    );
-  }
-
   return (
     <SafeAreaView
       style={{
         flex: 1,
       }}
     >
-      <Header
-        value={wantedPokemon}
-        onChangeText={setWantedPokemon}
-        pokemonLength={pokemonLength}
-      />
-
       <FlatList
         data={filteredPokemons}
         renderItem={renderItem}
         numColumns={2}
+        ListHeaderComponent={() => (
+          <View style={styles.headerView}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 18,
+              }}
+            >
+              <PokeballIcon />
+              <Text
+                style={{
+                  fontFamily: Fonts.montserrat_semibold,
+                  fontSize: 18,
+                  textAlign: 'center',
+                  color: theme.colors.text,
+                }}
+              >
+                {pokemonLength + ' ' + t('home.list.header')}
+              </Text>
+            </View>
+
+            <Filter
+              selectedFilter={selectedFilter}
+              setSelectedFilter={setSelectedFilter}
+            />
+          </View>
+        )}
         columnWrapperStyle={styles.listColumn}
         contentContainerStyle={styles.listContainer}
         keyExtractor={(item: PokemonDTO) => item.id.toString()}

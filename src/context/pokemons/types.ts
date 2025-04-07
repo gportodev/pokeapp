@@ -10,6 +10,8 @@ type PokemonListContext = {
   setPokemonList: React.Dispatch<React.SetStateAction<PokemonDTO[]>>;
   loading: boolean;
   pokemonLength: number;
+  wantedPokemon: string;
+  setWantedPokemon: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export { PokemonProps, PokemonListContext };

@@ -2,6 +2,7 @@ import { useSQLiteContext } from 'expo-sqlite';
 
 export type PokemonDatabase = {
   id: number;
+  displayId: string;
   name: string;
   displayName: string;
   height: number;
@@ -32,6 +33,7 @@ export function usePokemonDatabase() {
   async function create(data: PokemonDatabase) {
     const {
       id,
+      displayId,
       name,
       displayName,
       height,
@@ -59,6 +61,7 @@ export function usePokemonDatabase() {
     const statement = await database.prepareAsync(`
       INSERT INTO pokemons (
       id,
+      displayId,
       name,
       displayName,
       height,
@@ -83,6 +86,7 @@ export function usePokemonDatabase() {
       evolutions)
       VALUES (
       $id,
+      $displayId,
       $name,
       $displayName,
       $height,
@@ -110,6 +114,7 @@ export function usePokemonDatabase() {
     try {
       await statement.executeAsync({
         $id: id,
+        $displayId: displayId,
         $name: name,
         $displayName: displayName,
         $height: height,
@@ -172,9 +177,6 @@ export function usePokemonDatabase() {
       const query = 'UPDATE pokemons SET evolutions = ? WHERE name = ?';
 
       const response = await database.runAsync(query, [evolutions, name]);
-
-      console.log('RESPONSE');
-      console.log(JSON.stringify(response, undefined, 2));
 
       return response;
     } catch (error) {

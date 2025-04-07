@@ -82,4 +82,29 @@ function getTagFromType(type: PokemonType): TypeColor {
   return tagMap[type];
 }
 
-export { getTagFromType };
+const pokemonTypes: Record<string, string> = {
+  normal: 'detail.types.normal',
+  fire: 'detail.types.fire',
+  water: 'detail.types.water',
+  grass: 'detail.types.grass',
+  electric: 'detail.types.electric',
+  ice: 'detail.types.ice',
+  fighting: 'detail.types.fighting',
+  poison: 'detail.types.poison',
+  ground: 'detail.types.ground',
+  flying: 'detail.types.flying',
+  psychic: 'detail.types.psychic',
+  bug: 'detail.types.bug',
+  rock: 'detail.types.rock',
+  ghost: 'detail.types.ghost',
+  dragon: 'detail.types.dragon',
+  dark: 'detail.types.dark',
+  steel: 'detail.types.steel',
+  fairy: 'detail.types.fairy',
+};
+
+function getTypeTranslation(type: string): string {
+  return pokemonTypes[type];
+}
+
+export { getTagFromType, getTypeTranslation };

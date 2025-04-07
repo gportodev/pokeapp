@@ -17,3 +17,13 @@ export { default as RockIcon } from './svg/rock.svg';
 export { default as SteelIcon } from './svg/steel.svg';
 export { default as WaterIcon } from './svg/water.svg';
 export { default as PokeballIcon } from './svg/pokeball.svg';
+export { default as LogoIcon } from './svg/logo.svg';
+
+export { default as LogoBackground } from './png/bg.png';
+
+export { default as MenuIcon } from './svg/align-justify.svg';
+export { default as ArrowIcon } from './svg/arrow-left.svg';
+export { default as FilterIcon } from './svg/filter.svg';
+export { default as HomeIcon } from './svg/home.svg';
+export { default as SearchIcon } from './svg/search.svg';
+export { default as SettingsIcon } from './svg/settings.svg';
