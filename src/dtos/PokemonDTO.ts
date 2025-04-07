@@ -13,6 +13,7 @@ import { PokemonSpeciesDTO } from './PokemonSpeciesDTO';
 
 export interface PokemonDTO {
   id: number;
+  displayId: string;
   name: string;
   displayName: string;
   base_experience: number;

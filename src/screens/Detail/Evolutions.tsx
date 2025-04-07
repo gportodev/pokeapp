@@ -38,7 +38,7 @@ function Evolutions({
             color: themeColor,
           }}
         >
-          {translate('detail.evolutions.error')}
+          {translate('detail.evolutions.none')}
         </Text>
       </View>
     );

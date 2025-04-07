@@ -28,7 +28,7 @@
     }
   },
   "home": {
-    "loading": "Carregando pokemons...",
+    "loading": "Carregando pokémons...",
     "input": {
       "text": "Busca"
     },
@@ -435,17 +435,29 @@
     },
     "evolutions": {
       "title":  "Árvore Evolutiva",
-      "error": "Nenhuma evolução encontrada"
+      "none": "Does not have",
+      "error": {
+        "title": "Opa!",
+        "message": "Não conseguimos carregar as evoluções deste Pokémon agora."
+      }
     },
     "forms": {
       "title":"Formas",
-      "error": "Nenhuma forma encontrada"
+      "loading": "Carregando formas...",
+      "none": "Não possui",
+      "error": {
+        "title": "Opa!",
+        "message": "Não conseguimos carregar as formas deste Pokémon agora."
+      }
     }
   },
   "loader": {
     "text": "Lista de pokémons vazia"
   },
   "list": {
-    "error": "Lista de pokémons vazia"
+    "error": {
+      "title": "Opa!",
+      "message": "Não conseguimos carregar os pokémons agora."
+    }
   }
 }

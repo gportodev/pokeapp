@@ -33,7 +33,7 @@ function Pokemons({ onPress }: PokemonsProps) {
 
       const matchesSearch =
         pokemon.displayName.includes(searchText) ||
-        pokemon.id.toString().includes(searchText);
+        pokemon.displayId.toString().includes(searchText);
 
       return matchesType && matchesSearch;
     });

@@ -452,17 +452,29 @@
     },
     "evolutions": {
     "title":  "Family tree",
-    "error": "No evolutions found"
+    "none": "Does not have",
+    "error": {
+      "title": "Oops!",
+      "message": "We couldn't load this Pokémon's evolutions right now."
+      }
     },
     "forms": {
       "title":"Forms",
-      "error": "No forms found"
+      "loading": "Loading forms...",
+      "none": "Does not have",
+      "error": {
+        "title": "Oops!",
+        "message": "We couldn't load this Pokémon's forms right now."
+      }
     }
   },
   "loader": {
     "text": "Empty pokemon list!"
   },
   "list": {
-    "error": "Empty pokemon list"
+    "error": {
+      "title": "Oops!",
+      "message": "We couldn't load pokémons right now."
+    }
   }
 }

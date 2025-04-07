@@ -26,6 +26,7 @@ import {
   listForApiMisleadingEvolution,
   correctGalarPokemonsTree,
 } from '@/common/utils/evolutions';
+import { useTranslation } from 'react-i18next';
 // import { validatePokemonEvolutions } from '@/common/utils/validation';
 
 const defaultValue: PokemonListContext = {
@@ -44,8 +45,8 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
   const [pokemonLength, setPokemonLength] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const [wantedPokemon, setWantedPokemon] = useState('');
-
   const pokemonDatabase = usePokemonDatabase();
+  const { t } = useTranslation();
 
   const checkAlolaEvolution = useCallback((name: string) => {
     const hasAlolaEvolution = alolaList[name];
@@ -119,13 +120,6 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
       // Retrieve evolution tree that matches the pokemon name
       const chainName = nameFromChainList[name] || name;
 
-      // console.log('Name: ' + JSON.stringify(name));
-
-      // console.log(
-      //   'evolutionMap retrieveCorrectPokemonName: ' +
-      //     JSON.stringify(evolutionMap[chainName], undefined, 2),
-      // );
-
       return evolutionMap[chainName];
     }
   }, []);
@@ -152,34 +146,6 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
           ? []
           : evolutions;
 
-      // console.log(
-      //   'normalEvolutionsList: ' +
-      //     JSON.stringify(normalEvolutionsList.length, undefined, 2),
-      // );
-      // console.log('Evolutions: ' + JSON.stringify(evolutions, undefined, 2));
-
-      // console.log(
-      //   'alolaEvolutionsList: ' +
-      //     JSON.stringify(alolaEvolutionsList, undefined, 2),
-      // );
-      // console.log(
-      //   'galarEvolutionsList: ' +
-      //     JSON.stringify(galarEvolutionsList, undefined, 2),
-      // );
-
-      // console.log(
-      //   'apiEvolutionList: ' + JSON.stringify(apiEvolutionList, undefined, 2),
-      // );
-
-      // console.log(
-      //   'normalEvolutionsList: ' +
-      //     JSON.stringify(normalEvolutionsList, undefined, 2),
-      // );
-      // console.log(
-      //   'hisuiEvolutionsList: ' +
-      //     JSON.stringify(hisuiEvolutionsList, undefined, 2),
-      // );
-
       const joinChecks = [
         ...alolaEvolutionsList,
         ...galarEvolutionsList,
@@ -187,10 +153,6 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
         ...hisuiEvolutionsList,
         ...apiEvolutionList,
       ];
-
-      // console.log('Poke: ' + JSON.stringify(name));
-
-      // console.log('Join checks: ' + JSON.stringify(joinChecks, undefined, 2));
 
       return joinChecks;
     },
@@ -321,8 +283,11 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
                 ? getAllEvolutions([], name)
                 : await getEvolutionChain(name, id);
 
+            const match = species.url.match(/pokemon-species\/(\d+)\//) || '';
+
             const dataToShow = {
               ...pokemonInfo.data,
+              displayId: match[1],
               displayName: formatNameToShow(name),
               avatar: imagePath,
               weaknesses: flattenedWeaknesses,
@@ -345,6 +310,7 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
               cries: JSON.stringify(cries),
               is_default: is_default ? 1 : 0,
               pokemon_order: order,
+              displayId: match[1],
               displayName: formatNameToShow(name),
               weaknesses: JSON.stringify(flattenedWeaknesses),
               avatar: JSON.stringify(imagePath),
@@ -364,6 +330,8 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
         (item): item is PokemonDTO => item !== null,
       );
 
+      // Function to validate all pokemons evolutions
+      //
       // let correctPokemonEvolutions = 0;
 
       // validPokemonList.forEach(pokemon => {
@@ -375,11 +343,11 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
 
       setPokemonList(validPokemonList);
     } catch (error) {
-      Alert.alert('Error', 'Could not fetch all pokémons');
+      Alert.alert(t('list.error.title'), t('list.error.message'));
     } finally {
       setLoading(false);
     }
-  }, [getAllEvolutions, getEvolutionChain, pokemonDatabase]);
+  }, [getAllEvolutions, getEvolutionChain, pokemonDatabase, t]);
 
   const getPokemonsList = useCallback(async (): Promise<void> => {
     try {
@@ -436,11 +404,11 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
         await fetchAllPokemon();
       }
     } catch (error) {
-      Alert.alert('Error', 'List of pokemons unavailable.Try again later');
+      Alert.alert(t('list.error.title'), t('list.error.message'));
     } finally {
       setLoading(false);
     }
-  }, [fetchAllPokemon, pokemonDatabase]);
+  }, [fetchAllPokemon, pokemonDatabase, t]);
 
   const countUniqueSpecies = useCallback(() => {
     const total = _.uniqBy(pokemonList, pokemon => pokemon.species.name).length;

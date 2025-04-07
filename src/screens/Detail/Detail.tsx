@@ -30,7 +30,7 @@ function Detail({ navigation, route }: DetailProps): JSX.Element {
   const themeMode = theme.colors.screen.detail.text;
 
   const {
-    id,
+    displayId,
     displayName,
     height,
     types,
@@ -72,7 +72,7 @@ function Detail({ navigation, route }: DetailProps): JSX.Element {
                 },
               ]}
             >
-              {'#' + id.toString()}
+              {'#' + displayId}
             </Text>
 
             <Text

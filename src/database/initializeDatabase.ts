@@ -4,6 +4,7 @@ export async function initializeDatabase(database: SQLite.SQLiteDatabase) {
   await database.execAsync(`
     CREATE TABLE IF NOT EXISTS pokemons (
       id INTEGER PRIMARY KEY NOT NULL,
+      displayId INTEGER,
       name TEXT,
       displayName TEXT,
       height INTEGER,

@@ -5,7 +5,7 @@ import ToggleSwitch from 'toggle-switch-react-native';
 import styles from './styles';
 import { useTheme } from '@/context/theme';
 
-function Switch() {
+function Switch(): JSX.Element {
   const { storeTheme, theme } = useTheme();
 
   const [switchState, setSwitchState] = useState(theme.dark);

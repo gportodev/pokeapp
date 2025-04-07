@@ -14,7 +14,7 @@ type PokemonProps = {
 };
 
 function Pokemon({ item, onPress }: PokemonProps): JSX.Element {
-  const { id, displayName, avatar, types } = item;
+  const { displayId, displayName, avatar, types } = item;
   const { theme } = useTheme();
 
   const pokemonTypes = useMemo(() => {
@@ -64,7 +64,7 @@ function Pokemon({ item, onPress }: PokemonProps): JSX.Element {
             },
           ]}
         >
-          #{id}
+          #{displayId}
         </Text>
 
         <Text

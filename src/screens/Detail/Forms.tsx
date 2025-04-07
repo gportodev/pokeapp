@@ -9,6 +9,7 @@ import { Pokemon } from '@/components/Pokemon';
 import { usePokemon } from '@/context/pokemons';
 import { Loader } from '@/components/Loader';
 import { Translate } from '.';
+import { useTranslation } from 'react-i18next';
 
 type FormsProps = Translate & {
   pokemon: PokemonDTO;
@@ -26,6 +27,7 @@ function Forms({
   const [forms, setForms] = useState<PokemonDTO[]>([]);
   const { name, id, is_default, displayName, species } = pokemon;
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
 
   // Catch pokemons forms to not default forms
   // Ex: ogerpon
@@ -72,11 +74,14 @@ function Forms({
         setForms(pokemonForms.filter(Boolean) as PokemonDTO[]);
       }
     } catch (error) {
-      Alert.alert('Error', 'Could not fetching forms');
+      Alert.alert(
+        t('detail.forms.error.title'),
+        t('detail.forms.error.message'),
+      );
     } finally {
       setLoading(false);
     }
-  }, [id, name, pokemonList]);
+  }, [id, name, pokemonList, t]);
 
   const renderItem = useCallback(
     ({ item }: { item: PokemonDTO }) => {
@@ -93,7 +98,7 @@ function Forms({
             color: themeColor,
           }}
         >
-          {translate('detail.forms.error')}
+          {translate('detail.forms.none')}
         </Text>
       </View>
     );
@@ -116,10 +121,10 @@ function Forms({
   const renderLoading = useMemo(
     () => (
       <View>
-        <Loader height={70} width={70} loadingText="Loading forms..." />
+        <Loader height={70} width={70} loadingText={t('forms.loading')} />
       </View>
     ),
-    [],
+    [t],
   );
 
   useEffect(() => {
