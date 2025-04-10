@@ -1,16 +1,19 @@
-import React, { useEffect, useMemo } from 'react';
-import { View, Text, SafeAreaView } from 'react-native';
+import React, {
+  // useEffect
+  useMemo,
+} from 'react';
+import { View, Text, SafeAreaView, ActivityIndicator } from 'react-native';
 
 import styles from './styles';
 
-import Animated, {
-  useSharedValue,
-  withTiming,
-  useAnimatedStyle,
-  withRepeat,
-  ReduceMotion,
-} from 'react-native-reanimated';
-import img from '../../../assets/icon.png';
+// import Animated, {
+//   useSharedValue,
+//   withTiming,
+//   useAnimatedStyle,
+//   withRepeat,
+//   ReduceMotion,
+// } from 'react-native-reanimated';
+// import img from '../../../assets/icon.png';
 import { useTheme } from '@react-navigation/native';
 
 type LoaderProps = {
@@ -27,28 +30,28 @@ function Loader({
   fullScreen = false,
 }: LoaderProps): JSX.Element {
   const { colors } = useTheme();
-  const duration = 1000;
+  // const duration = 1000;
 
-  const sv = useSharedValue<number>(0);
+  // const sv = useSharedValue<number>(0);
 
-  useEffect(() => {
-    sv.value = withRepeat(
-      withTiming(1, { duration }),
-      -1,
-      false,
-      () => {},
-      ReduceMotion.System,
-    );
-  }, [sv]);
+  // const animatedStyle = useAnimatedStyle(() => ({
+  //   transform: [{ rotate: `${sv.value * 360}deg` }],
+  // }));
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${sv.value * 360}deg` }],
-  }));
+  // useEffect(() => {
+  //   sv.value = withRepeat(
+  //     withTiming(1, { duration }),
+  //     -1,
+  //     false,
+  //     () => {},
+  //     ReduceMotion.System,
+  //   );
+  // }, [sv]);
 
   const renderLoad = useMemo(() => {
     return (
       <View style={styles.container}>
-        <Animated.Image
+        {/* <Animated.Image
           source={img}
           style={[
             {
@@ -57,12 +60,13 @@ function Loader({
             },
             animatedStyle,
           ]}
-        />
+        /> */}
+        <ActivityIndicator size={'large'} />
 
         {loadingText && <Text style={styles.loadingText}>{loadingText}</Text>}
       </View>
     );
-  }, [animatedStyle, height, loadingText, width]);
+  }, [loadingText]);
 
   return fullScreen ? (
     <SafeAreaView
