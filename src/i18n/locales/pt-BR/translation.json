@@ -27,6 +27,20 @@
       }
     }
   },
+  "about": {
+    "title": "Sobre",
+    "legal":{
+      "title": "Informações Legais e Créditos",
+      "description": "Este aplicativo foi criado com o único objetivo de auxiliar fãs de Pokémon, oferecendo uma forma prática e acessível de consultar informações sobre os monstrinhos da franquia. Trata-se de um projeto pessoal, sem qualquer interesse financeiro, comercial ou de marketing, e que não realiza nenhum tipo de coleta de dados dos usuários. Nosso foco é contribuir com a comunidade aberta de fãs, respeitando sempre os direitos e diretrizes das marcas envolvidas. Os dados exibidos no app são fornecidos pela PokéAPI (https://pokeapi.co/), uma API pública e gratuita mantida por colaboradores da comunidade Pokémon. Este aplicativo não possui qualquer afiliação, apoio ou relação oficial com a The Pokémon Company, Nintendo, Game Freak ou Creatures Inc. Todos os nomes, imagens e demais elementos relacionados à franquia são de propriedade de seus respectivos detentores de direitos autorais. Nosso intuito não é violar qualquer propriedade intelectual, mas sim demonstrar admiração e respeito por esse universo que tantos fãs amam."
+    },
+    "version": {
+      "title": "Versão"
+    },
+    "privacy": {
+      "title": "Privacidade e Segurança",
+      "description": "Política de Privacidade"
+    }
+  },
   "home": {
     "loading": "Carregando pokémons...",
     "input": {
