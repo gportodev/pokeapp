@@ -1,19 +1,17 @@
-import React, {
-  // useEffect
-  useMemo,
-} from 'react';
-import { View, Text, SafeAreaView, ActivityIndicator } from 'react-native';
+import React, { useEffect, useMemo } from 'react';
+import { Text, SafeAreaView, ImageBackground } from 'react-native';
 
 import styles from './styles';
 
-// import Animated, {
-//   useSharedValue,
-//   withTiming,
-//   useAnimatedStyle,
-//   withRepeat,
-//   ReduceMotion,
-// } from 'react-native-reanimated';
-// import img from '../../../assets/icon.png';
+import Animated, {
+  useSharedValue,
+  withTiming,
+  useAnimatedStyle,
+  withRepeat,
+  ReduceMotion,
+} from 'react-native-reanimated';
+import bg from '../../../src/assets/icons/png/bg.png';
+import logo from '../../../src/assets/icons/png/logo.png';
 import { useTheme } from '@react-navigation/native';
 
 type LoaderProps = {
@@ -30,29 +28,34 @@ function Loader({
   fullScreen = false,
 }: LoaderProps): JSX.Element {
   const { colors } = useTheme();
-  // const duration = 1000;
+  const duration = 1000;
 
-  // const sv = useSharedValue<number>(0);
+  const sv = useSharedValue<number>(0);
 
-  // const animatedStyle = useAnimatedStyle(() => ({
-  //   transform: [{ rotate: `${sv.value * 360}deg` }],
-  // }));
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      { perspective: 1000 },
+      {
+        rotateY: `${sv.value}deg`,
+      },
+    ],
+  }));
 
-  // useEffect(() => {
-  //   sv.value = withRepeat(
-  //     withTiming(1, { duration }),
-  //     -1,
-  //     false,
-  //     () => {},
-  //     ReduceMotion.System,
-  //   );
-  // }, [sv]);
+  useEffect(() => {
+    sv.value = withRepeat(
+      withTiming(360, { duration }),
+      -1,
+      false,
+      () => {},
+      ReduceMotion.System,
+    );
+  }, [sv]);
 
   const renderLoad = useMemo(() => {
     return (
-      <View style={styles.container}>
-        {/* <Animated.Image
-          source={img}
+      <ImageBackground style={styles.container} source={bg}>
+        <Animated.Image
+          source={logo}
           style={[
             {
               width,
@@ -60,13 +63,12 @@ function Loader({
             },
             animatedStyle,
           ]}
-        /> */}
-        <ActivityIndicator size={'large'} />
+        />
 
         {loadingText && <Text style={styles.loadingText}>{loadingText}</Text>}
-      </View>
+      </ImageBackground>
     );
-  }, [loadingText]);
+  }, [animatedStyle, height, loadingText, width]);
 
   return fullScreen ? (
     <SafeAreaView

@@ -15,8 +15,8 @@ export default StyleSheet.create({
   },
   loadingText: {
     fontFamily: Fonts.montserrat_semibold,
-    fontSize: 14,
-    color: colors.gray_bold,
+    fontSize: 16,
+    color: colors.white,
     textAlign: 'center',
   },
 });

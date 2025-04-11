@@ -490,5 +490,10 @@
       "title": "Oops!",
       "message": "We couldn't load pokémons right now."
     }
+  },
+  "updateModal": {
+    "title": "New version available",
+    "subTitle": "Update your app to enjoy the latest improvements and features.",
+    "Update": "Update"
   }
 }

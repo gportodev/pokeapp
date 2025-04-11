@@ -10,6 +10,7 @@ import '@/i18n';
 import { LanguageProvider } from '@/context/language';
 import { Routes } from '@/routes';
 import { ThemeProvider } from '@/context/theme';
+import { UpdateProvider } from '@/context/update';
 
 export default function App(): JSX.Element {
   const isLoading = useCachedResources();
@@ -21,12 +22,14 @@ export default function App(): JSX.Element {
   return (
     <ThemeProvider>
       <LanguageProvider>
-        <SQLiteProvider databaseName="pokemon.db" onInit={initializeDatabase}>
-          <StatusBar />
-          <PokemonProvider>
-            <Routes />
-          </PokemonProvider>
-        </SQLiteProvider>
+        <UpdateProvider>
+          <SQLiteProvider databaseName="pokemon.db" onInit={initializeDatabase}>
+            <StatusBar />
+            <PokemonProvider>
+              <Routes />
+            </PokemonProvider>
+          </SQLiteProvider>
+        </UpdateProvider>
       </LanguageProvider>
     </ThemeProvider>
   );

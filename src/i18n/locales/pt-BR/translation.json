@@ -473,5 +473,10 @@
       "title": "Opa!",
       "message": "Não conseguimos carregar os pokémons agora."
     }
+  },
+  "updateModal": {
+    "title": "Nova versão disponível",
+    "subTitle": "Atualize o app para aproveitar as melhorias e novos recursos.",
+    "update": "Atualizar"
   }
 }

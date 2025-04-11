@@ -20,6 +20,7 @@
     "@react-navigation/drawer": "^6.x",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/native-stack": "^6.11.0",
+    "@types/react-native-version-check": "^3.4.8",
     "axios": "^0.21.0",
     "expo": "^51.0.39",
     "expo-asset": "~10.0.10",
@@ -46,6 +47,7 @@
     "react-native-screens": "3.31.1",
     "react-native-svg": "15.2.0",
     "react-native-svg-transformer": "^1.5.0",
+    "react-native-version-check": "^3.4.7",
     "react-native-web": "~0.19.10",
     "toggle-switch-react-native": "^3.3.0"
   },
