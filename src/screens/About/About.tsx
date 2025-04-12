@@ -69,7 +69,7 @@ function About({ navigation }: AboutProps): JSX.Element {
           <View
             style={{
               gap: 10,
-              marginTop: 24,
+              paddingVertical: 32,
             }}
           >
             <Text

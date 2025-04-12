@@ -10,12 +10,12 @@ import { Header } from '@/components/Header';
 import { Loader } from '@/components/Loader';
 import { useTranslation } from 'react-i18next';
 import { usePokemon } from '@/context/pokemons';
-import { useTheme } from '@react-navigation/native';
+import { useTheme } from '@/context/theme';
 
 function Home({ navigation }: HomeProps): JSX.Element {
   const { loading } = usePokemon();
   const { t } = useTranslation();
-  const { colors } = useTheme();
+  const { theme } = useTheme();
 
   const onPress = useCallback(
     (item: PokemonDTO) => {
@@ -33,10 +33,10 @@ function Home({ navigation }: HomeProps): JSX.Element {
       <SafeAreaView
         style={{
           flex: 1,
-          backgroundColor: colors.background,
+          backgroundColor: theme.colors.background,
         }}
       >
-        <StatusBar style="auto" />
+        <StatusBar style={theme.dark ? 'light' : 'dark'} />
         <Header />
         <Pokemons onPress={onPress} />
       </SafeAreaView>
