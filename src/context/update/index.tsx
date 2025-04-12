@@ -5,7 +5,8 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-
+import * as StoreReview from 'expo-store-review';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 import VersionCheck from 'react-native-version-check';
 import { Platform } from 'react-native';
@@ -26,6 +27,9 @@ const defaultValue: UpContext = {
 };
 
 const UpdateContext = createContext(defaultValue);
+
+const reviewKey = 'lastReviewDate';
+const cooldown = 30;
 
 function UpdateProvider({ children }: UpdateProps): JSX.Element {
   const [hasUpdate, setHasUpdate] = useState(false);
@@ -51,8 +55,43 @@ function UpdateProvider({ children }: UpdateProps): JSX.Element {
     }
   };
 
+  const requestStoreReview = async () => {
+    try {
+      const isAvailable = await StoreReview.isAvailableAsync();
+
+      if (!isAvailable) return;
+
+      const lastReview = await AsyncStorage.getItem(reviewKey);
+
+      if (lastReview) {
+        const lastDate = new Date(lastReview);
+
+        const now = new Date();
+
+        const daysDiff =
+          (now.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24);
+
+        if (daysDiff < cooldown) {
+          return;
+        }
+      }
+
+      await StoreReview.requestReview();
+
+      await AsyncStorage.setItem(reviewKey, new Date().toISOString());
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
+    const timeout = setTimeout(async () => {
+      await requestStoreReview();
+    }, 5000);
+
     checkForUpdate();
+
+    return () => clearTimeout(timeout);
   }, []);
 
   return (
