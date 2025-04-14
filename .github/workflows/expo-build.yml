@@ -1,7 +1,7 @@
 on:
     push:
-        branches:
-            - develop
+        tags:
+            - 'dev/*'
 
 jobs:
     eas-build:
