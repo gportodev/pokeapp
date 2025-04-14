@@ -73,7 +73,7 @@ function Pokemons({ onPress }: PokemonsProps) {
                 gap: 18,
               }}
             >
-              <PokeballIcon />
+              <PokeballIcon color={theme.colors.icon.default} />
               <Text
                 style={{
                   fontFamily: Fonts.montserrat_semibold,

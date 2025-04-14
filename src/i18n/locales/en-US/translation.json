@@ -27,6 +27,20 @@
       }
     }
   },
+  "about": {
+    "title": "About",
+    "legal": {
+      "title": "Legal Notice & Credits",
+      "description": "This app was created with the sole purpose of helping Pokémon fans, offering a practical and accessible way to explore information about the franchise's creatures. It is a personal project with no financial, commercial, or marketing intent, and it does not collect any user data. Our goal is to support the open fan community, always respecting the rights and guidelines of the original brands. The data displayed in the app is provided by PokéAPI (https://pokeapi.co/), a free and public API maintained by Pokémon community contributors. This application is not affiliated with, endorsed by, or connected in any way to The Pokémon Company, Nintendo, Game Freak, or Creatures Inc. All names, images, and other related assets are the property of their respective copyright holders. The app is not intended to infringe on any intellectual property, but rather to show appreciation and respect for the universe so many fans love."
+    },
+    "version": {
+      "title": "Version"
+    },
+    "privacy": {
+      "title": "Privacy & Security",
+      "description": "Privacy Policy"
+    }
+  },
   "home": {
     "loading": "Loading pokemons...",
     "input": {
@@ -476,5 +490,10 @@
       "title": "Oops!",
       "message": "We couldn't load pokémons right now."
     }
+  },
+  "updateModal": {
+    "title": "New version available",
+    "subTitle": "Update your app to enjoy the latest improvements and features.",
+    "Update": "Update"
   }
 }

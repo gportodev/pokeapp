@@ -10,8 +10,9 @@ import { AppStackRoutes } from './app.routes';
 
 import { useTranslation } from 'react-i18next';
 import { DrawerHeader } from '@/components/DrawerHeader';
-import { HomeIcon, SettingsIcon } from '@/assets/icons/Loader';
+import { HomeIcon, InfoIcon, SettingsIcon } from '@/assets/icons/Loader';
 import { useTheme } from '@/context/theme';
+import { About } from '@/screens/About';
 
 const Drawer = createDrawerNavigator<DrawerParamList>();
 
@@ -49,6 +50,15 @@ function AppDrawerRoutes(): JSX.Element {
           title: t('settings.title'),
           headerShown: false,
           drawerIcon: ({ color }) => <SettingsIcon color={color} />,
+        }}
+      />
+      <Drawer.Screen
+        name="About"
+        component={About}
+        options={{
+          title: t('about.title'),
+          headerShown: false,
+          drawerIcon: ({ color }) => <InfoIcon color={color} />,
         }}
       />
     </Drawer.Navigator>

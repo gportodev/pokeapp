@@ -12,6 +12,7 @@ type StackParamList = {
 type DrawerParamList = {
   Main: NavigatorScreenParams<StackParamList>;
   Settings: undefined;
+  About: undefined;
 };
 
 type HomeProps = {
@@ -27,10 +28,15 @@ type SettingsProps = {
   navigation: NativeStackNavigationProp<DrawerParamList, 'Settings'>;
 };
 
+type AboutProps = {
+  navigation: NativeStackNavigationProp<DrawerParamList, 'About'>;
+};
+
 export {
   DrawerParamList,
   StackParamList,
   HomeProps,
   DetailProps,
   SettingsProps,
+  AboutProps,
 };

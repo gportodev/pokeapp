@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { View, Text, SafeAreaView } from 'react-native';
+import { Text, SafeAreaView, ImageBackground } from 'react-native';
 
 import styles from './styles';
 
@@ -10,7 +10,8 @@ import Animated, {
   withRepeat,
   ReduceMotion,
 } from 'react-native-reanimated';
-import img from '../../../assets/icon.png';
+import bg from '../../../src/assets/icons/png/bg.png';
+import logo from '../../../src/assets/icons/png/logo.png';
 import { useTheme } from '@react-navigation/native';
 
 type LoaderProps = {
@@ -31,9 +32,18 @@ function Loader({
 
   const sv = useSharedValue<number>(0);
 
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [
+      { perspective: 1000 },
+      {
+        rotateY: `${sv.value}deg`,
+      },
+    ],
+  }));
+
   useEffect(() => {
     sv.value = withRepeat(
-      withTiming(1, { duration }),
+      withTiming(360, { duration }),
       -1,
       false,
       () => {},
@@ -41,15 +51,11 @@ function Loader({
     );
   }, [sv]);
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${sv.value * 360}deg` }],
-  }));
-
   const renderLoad = useMemo(() => {
     return (
-      <View style={styles.container}>
+      <ImageBackground style={styles.container} source={bg}>
         <Animated.Image
-          source={img}
+          source={logo}
           style={[
             {
               width,
@@ -60,7 +66,7 @@ function Loader({
         />
 
         {loadingText && <Text style={styles.loadingText}>{loadingText}</Text>}
-      </View>
+      </ImageBackground>
     );
   }, [animatedStyle, height, loadingText, width]);
 

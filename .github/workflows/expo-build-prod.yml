@@ -1,10 +1,14 @@
 on:
-    pull_request:
-        branches:
-            - main
+    # pull_request:
+    #     branches:
+    #         - main
 
-        types:
-            - closed
+    #     types:
+    #         - closed
+
+    push:
+      tags:
+        - 'prod/*'
 
 jobs:
     eas-build:

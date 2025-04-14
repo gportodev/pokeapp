@@ -25,9 +25,8 @@ function DrawerHeader(props: DrawerContentComponentProps): JSX.Element {
           gap: 10,
         }}
       >
-        <LogoIcon width={54} height={54} />
+        <LogoIcon width={74} height={74} />
 
-        <Text style={styles.title}>{t('drawer.headerTitle')}</Text>
         <Text style={styles.subTitle}>{t('drawer.headerSubTitle')}</Text>
       </ImageBackground>
 
