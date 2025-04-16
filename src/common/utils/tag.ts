@@ -103,8 +103,35 @@ const pokemonTypes: Record<string, string> = {
   fairy: 'detail.types.fairy',
 };
 
+const darkThemeOverrides: Record<string, { background: string; text: string }> =
+  {
+    flying: {
+      background: colors.ocean_blue_50,
+      text: colors.light_sky_blue,
+    },
+    normal: {
+      background: colors.strong_sky_blue,
+      text: colors.light_gray,
+    },
+    steel: {
+      background: colors.deep_slate_50,
+      text: colors.cool_gray,
+    },
+    dark: {
+      background: colors.strong_sky_blue_10,
+      text: colors.strong_sky_blue,
+    },
+  };
+
+function getdarkThemeOverrides(type: string): {
+  background: string;
+  text: string;
+} {
+  return darkThemeOverrides[type];
+}
+
 function getTypeTranslation(type: string): string {
   return pokemonTypes[type];
 }
 
-export { getTagFromType, getTypeTranslation };
+export { getTagFromType, getTypeTranslation, getdarkThemeOverrides };

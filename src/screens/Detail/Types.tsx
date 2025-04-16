@@ -2,15 +2,22 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import styles from './styles';
 import { PokemonTypeDTO } from '@/dtos/PokemonTypeDTO';
-import { getTagFromType, getTypeTranslation } from '@/common/utils/tag';
+import {
+  getdarkThemeOverrides,
+  getTagFromType,
+  getTypeTranslation,
+} from '@/common/utils/tag';
 import { PokemonType } from '@/common/utils/types';
 import { Translate } from './Detail';
+import { useTheme } from '@/context/theme';
 
 type TypeProps = Translate & {
   types: PokemonTypeDTO[];
 };
 
 function Types({ types, translate }: TypeProps) {
+  const { theme } = useTheme();
+
   return (
     <View style={styles.infoSubHeaderContainer}>
       {types.map(item => {
@@ -22,7 +29,10 @@ function Types({ types, translate }: TypeProps) {
             style={[
               styles.tagTypeContainer,
               {
-                backgroundColor: getTagFromType(type as PokemonType).background,
+                backgroundColor:
+                  theme.dark && getdarkThemeOverrides(type)
+                    ? getdarkThemeOverrides(type).background
+                    : getTagFromType(type as PokemonType).background,
               },
             ]}
           >
@@ -30,7 +40,10 @@ function Types({ types, translate }: TypeProps) {
               style={[
                 styles.tagTypeText,
                 {
-                  color: getTagFromType(type as PokemonType).text,
+                  color:
+                    theme.dark && getdarkThemeOverrides(type)
+                      ? getdarkThemeOverrides(type).text
+                      : getTagFromType(type as PokemonType).text,
                 },
               ]}
             >

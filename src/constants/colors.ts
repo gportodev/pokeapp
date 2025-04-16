@@ -120,15 +120,17 @@ export default {
   bold_yellow_orange_10: 'rgba(242, 206, 14, 0.1)', // Bold Yellow-Orange
   strong_magenta_10: 'rgba(194, 24, 91, 0.1)', // Strong Magenta
   bold_red_10: 'rgba(198, 40, 40, 0.1)', // Bold Red
-  strong_sky_blue_10: 'rgba(140, 144, 137, 0.1)', // Strong Sky Blue
-  deep_violet_10: 'rgba(69, 39, 160, 0.1)', // Deep Violet
+  strong_sky_blue_10: 'rgba(140, 144, 137, 0.1)', // Strong Sky Blue 10%
+  ocean_blue_50: 'rgba(83, 140, 180, 0.5)', // Strong Sky Blue 100%
+  deep_violet_10: 'rgba(2, 2, 2, 0.1)', // Deep Violet
   bold_brown_10: 'rgba(211, 80, 5, 0.1)', // Bold Brown
   strong_teal_10: 'rgba(88, 183, 237, 0.1)', // Strong Teal
   charcoal_black_10: 'rgba(33, 33, 33, 0.1)', // Charcoal Black
   deep_purple_variant_10: 'rgba(162, 52, 249, 0.1)', // Deep Purple
   bold_burnt_orange_10: 'rgba(240, 47, 140, 0.1)', // Bold Burnt Orange
   dark_brown_10: 'rgba(229, 162, 61, 0.1)', // Dark Brown
-  deep_slate_10: 'rgba(55, 71, 79, 0.1)', // Deep Slate
+  deep_slate_10: 'rgba(55, 71, 79, 0.1)', // Deep Slate 10%
+  deep_slate_50: 'rgba(55, 71, 79, 1)', // Deep Slate 100%
 
   //For pokemon text tag
   strong_orange_red: '#E96303', // Strong Red-Orange

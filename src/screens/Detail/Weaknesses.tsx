@@ -1,9 +1,14 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import styles from './styles';
-import { getTagFromType, getTypeTranslation } from '@/common/utils/tag';
+import {
+  getdarkThemeOverrides,
+  getTagFromType,
+  getTypeTranslation,
+} from '@/common/utils/tag';
 import { PokemonType } from '@/common/utils/types';
 import { Translate } from './Detail';
+import { useTheme } from '@/context/theme';
 
 type WeaknessesProps = Translate & {
   weaknesses: string[];
@@ -11,6 +16,8 @@ type WeaknessesProps = Translate & {
 };
 
 function Weaknesses({ weaknesses, themeColor, translate }: WeaknessesProps) {
+  const { theme } = useTheme();
+
   return (
     <View style={styles.secondBlockInfoContainer}>
       <Text
@@ -38,8 +45,10 @@ function Weaknesses({ weaknesses, themeColor, translate }: WeaknessesProps) {
               style={[
                 styles.tagTypeContainer,
                 {
-                  backgroundColor: getTagFromType(weakness as PokemonType)
-                    .background,
+                  backgroundColor:
+                    theme.dark && getdarkThemeOverrides(weakness)
+                      ? getdarkThemeOverrides(weakness).background
+                      : getTagFromType(weakness as PokemonType).background,
                 },
               ]}
             >
@@ -47,7 +56,10 @@ function Weaknesses({ weaknesses, themeColor, translate }: WeaknessesProps) {
                 style={[
                   styles.tagTypeText,
                   {
-                    color: getTagFromType(weakness as PokemonType).text,
+                    color:
+                      theme.dark && getdarkThemeOverrides(weakness)
+                        ? getdarkThemeOverrides(weakness).text
+                        : getTagFromType(weakness as PokemonType).text,
                   },
                 ]}
               >
