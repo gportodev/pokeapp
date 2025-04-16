@@ -1,6 +1,3 @@
-const splashBackground = '#FF4C41';
-const iconBackground = '#FFFFFF';
-
 module.exports = {
   expo: {
     name: 'pokeapp',
@@ -11,7 +8,6 @@ module.exports = {
     splash: {
       image: './assets/splash.png',
       resizeMode: 'contain',
-      backgroundColor: splashBackground,
     },
     updates: {
       fallbackToCacheTimeout: 0,
@@ -30,7 +26,6 @@ module.exports = {
       permissions: [],
       adaptiveIcon: {
         foregroundImage: './assets/adaptive-icon.png',
-        backgroundColor: iconBackground,
       },
     },
     web: {},
