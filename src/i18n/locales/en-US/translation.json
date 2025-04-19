@@ -485,6 +485,12 @@
   "loader": {
     "text": "Empty pokemon list!"
   },
+  "search": {
+    "error": {
+      "title": "No Pokémon found",
+      "subTitle": "Did you spell the name correctly?"
+    }
+  },
   "list": {
     "error": {
       "title": "Oops!",

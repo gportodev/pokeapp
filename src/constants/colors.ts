@@ -36,6 +36,7 @@ export default {
       icon: {
         default: '#2F3133',
         search: '#3E75C3',
+        sad: '#2F3133',
       },
       customCard: {
         background: '#FFFFFF',
@@ -82,6 +83,7 @@ export default {
       icon: {
         default: '#FFFFFF',
         search: '#FFFFFF',
+        sad: '#7A7D80',
       },
       customCard: {
         background: '#1E1E1E',

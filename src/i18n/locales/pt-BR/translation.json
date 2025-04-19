@@ -468,6 +468,12 @@
   "loader": {
     "text": "Lista de pokémons vazia"
   },
+  "search": {
+    "error": {
+      "title": "Nenhum Pokémon encontrado",
+      "subTitle": "Você digitou o nome certo?"
+    }
+  },
   "list": {
     "error": {
       "title": "Opa!",

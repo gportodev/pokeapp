@@ -1,14 +1,14 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, useDeferredValue } from 'react';
 
 import styles from './styles';
 
 import { Pokemon } from '../Pokemon';
 import { PokemonDTO } from '@/dtos/PokemonDTO';
-import { FlatList, SafeAreaView } from 'react-native';
+import { ActivityIndicator, FlatList, SafeAreaView } from 'react-native';
 import { View, Text } from 'react-native';
 import { usePokemon } from '@/context/pokemons';
 import { Filter } from '../Filter';
-import { PokeballIcon } from '@/assets/icons/Loader';
+import { PokeballIcon, SadIcon } from '@/assets/icons/Loader';
 import { Fonts } from '@/constants/fonts';
 import { useTheme } from '@/context/theme';
 import { useTranslation } from 'react-i18next';
@@ -22,9 +22,10 @@ function Pokemons({ onPress }: PokemonsProps) {
   const { theme } = useTheme();
   const { t } = useTranslation();
   const [selectedFilter, setSelectedFilter] = useState('');
+  const deferredSearch = useDeferredValue(wantedPokemon);
 
   const filteredPokemons = useMemo(() => {
-    const searchText = wantedPokemon.toLowerCase();
+    const searchText = deferredSearch.toLowerCase();
 
     return pokemonList.filter(pokemon => {
       const matchesType =
@@ -37,12 +38,33 @@ function Pokemons({ onPress }: PokemonsProps) {
 
       return matchesType && matchesSearch;
     });
-  }, [pokemonList, selectedFilter, wantedPokemon]);
+  }, [pokemonList, selectedFilter, deferredSearch]);
 
   const renderEmpty = () => {
     return (
-      <View>
-        <Text>{t('list.error')}</Text>
+      <View style={styles.emptyContainer}>
+        <SadIcon width={100} height={100} color={theme.colors.icon.sad} />
+
+        <Text
+          style={[
+            styles.emptyTextTitle,
+            {
+              color: theme.colors.text,
+            },
+          ]}
+        >
+          {t('search.error.title')}
+        </Text>
+        <Text
+          style={[
+            styles.emptyTextSubTitle,
+            {
+              color: theme.colors.text,
+            },
+          ]}
+        >
+          {t('search.error.subTitle')}
+        </Text>
       </View>
     );
   };
@@ -99,6 +121,8 @@ function Pokemons({ onPress }: PokemonsProps) {
         maxToRenderPerBatch={30}
         ListEmptyComponent={renderEmpty}
         extraData={wantedPokemon}
+        refreshing={deferredSearch !== wantedPokemon}
+        onRefresh={() => <ActivityIndicator size={'large'} />}
       />
     </SafeAreaView>
   );

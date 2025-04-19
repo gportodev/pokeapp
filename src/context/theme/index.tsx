@@ -29,6 +29,7 @@ export type CustomTheme = Theme & {
     icon: {
       default: string;
       search: string;
+      sad: string;
     };
     customCard: {
       background: string;
