@@ -28,3 +28,4 @@ export { default as HomeIcon } from './svg/home.svg';
 export { default as SearchIcon } from './svg/search.svg';
 export { default as SettingsIcon } from './svg/settings.svg';
 export { default as InfoIcon } from './svg/info.svg';
+export { default as SadIcon } from './svg/sad.svg';

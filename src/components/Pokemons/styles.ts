@@ -22,8 +22,21 @@ export default StyleSheet.create({
     textAlign: 'center',
   },
   headerView: {
-    // backgroundColor: 'blue',
     gap: 34,
     paddingVertical: 30,
+  },
+  emptyContainer: {
+    gap: 16,
+    alignItems: 'center',
+  },
+  emptyTextTitle: {
+    fontFamily: Fonts.montserrat_semibold,
+    fontSize: 18,
+    textAlign: 'center',
+  },
+  emptyTextSubTitle: {
+    fontFamily: Fonts.montserrat_regular,
+    fontSize: 16,
+    textAlign: 'center',
   },
 });
