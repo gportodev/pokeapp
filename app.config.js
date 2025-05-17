@@ -4,7 +4,7 @@ module.exports = {
   expo: {
     name: 'pokeapp',
     slug: 'pokeapp',
-    version: '1.0.4',
+    version: '1.0.5',
     orientation: 'portrait',
     icon: './assets/icon.png',
     splash: {
