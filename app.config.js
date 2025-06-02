@@ -1,5 +1,18 @@
 const background = '#CE0000';
 
+//trim() para o "development "
+// console.log(`[${process.env.APP_VARIANT}]`);
+const APP_VARIANT = (process.env.APP_VARIANT || '').trim();
+
+const PACKAGE_NAME = 'com.gamonpo.pokeapp';
+
+const IS_DEV =
+  APP_VARIANT === 'development' || APP_VARIANT === 'preview'
+    ? PACKAGE_NAME + '.dev'
+    : false;
+
+const BUNDLE_IDENTIFIER = IS_DEV || PACKAGE_NAME;
+
 module.exports = {
   expo: {
     name: 'pokeapp',
@@ -22,9 +35,10 @@ module.exports = {
     assetBundlePatterns: ['**/*'],
     ios: {
       supportsTablet: true,
+      bundleIdentifier: BUNDLE_IDENTIFIER,
     },
     android: {
-      package: 'com.gamonpo.pokeapp',
+      package: BUNDLE_IDENTIFIER,
       versionCode: 3,
       permissions: [],
       adaptiveIcon: {
