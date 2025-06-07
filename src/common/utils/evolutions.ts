@@ -1,3 +1,6 @@
+import { PokemonDTO } from '@/dtos/PokemonDTO';
+import _ from 'lodash';
+
 const normalList: Record<string, string[]> = {
   meowth: ['persian'],
   persian: ['meowth'],
@@ -133,6 +136,50 @@ const listForApiMisleadingEvolution: Record<string, string[]> = {
   'meloetta-aria': [],
 };
 
+const checkAlolaEvolution = (name: string) => {
+  const hasAlolaEvolution = alolaList[name];
+
+  if (!hasAlolaEvolution) return [];
+
+  return hasAlolaEvolution;
+};
+
+const checkGalarEvolution = (name: string) => {
+  const hasGalarEvolution = galarList[name];
+
+  if (!hasGalarEvolution) {
+    return [];
+  }
+
+  return hasGalarEvolution;
+};
+
+const checkNormalEvolution = (name: string) => {
+  const hasNormalEvolution = normalList[name];
+
+  if (!hasNormalEvolution) {
+    return [];
+  }
+
+  return hasNormalEvolution;
+};
+
+const checkHisuiEvolution = (name: string) => {
+  const hasHisuilEvolution = hisuiList[name];
+
+  if (!hasHisuilEvolution) {
+    return [];
+  }
+
+  return hasHisuilEvolution;
+};
+
+const countUniqueSpecies = (pokemonList: PokemonDTO[]) => {
+  const total = _.uniqBy(pokemonList, pokemon => pokemon.species.name).length;
+
+  return total;
+};
+
 export {
   alolaList,
   galarList,
@@ -141,4 +188,9 @@ export {
   nameFromChainList,
   correctGalarPokemonsTree,
   listForApiMisleadingEvolution,
+  checkAlolaEvolution,
+  checkGalarEvolution,
+  checkNormalEvolution,
+  checkHisuiEvolution,
+  countUniqueSpecies,
 };

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { JSX, useCallback, useEffect, useRef } from 'react';
 import { Animated, View } from 'react-native';
 import styles from './styles';
 
@@ -6,7 +6,7 @@ type ProgressBarProps = {
   progress: number;
 };
 
-function ProgressBar({ progress }: ProgressBarProps): JSX.Element {
+function StatsProgressBar({ progress }: ProgressBarProps): JSX.Element {
   const maxWidth = 36;
 
   const animatedValue = useRef(new Animated.Value(0)).current;
@@ -14,7 +14,7 @@ function ProgressBar({ progress }: ProgressBarProps): JSX.Element {
   useEffect(() => {
     Animated.timing(animatedValue, {
       toValue: progress,
-      duration: 1000,
+      duration: 5000,
       useNativeDriver: false,
     }).start();
   }, [animatedValue, progress]);
@@ -57,4 +57,4 @@ function ProgressBar({ progress }: ProgressBarProps): JSX.Element {
   );
 }
 
-export { ProgressBar };
+export { StatsProgressBar };

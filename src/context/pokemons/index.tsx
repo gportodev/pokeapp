@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useContext,
   useCallback,
+  JSX,
 } from 'react';
 import { PokemonDTO } from '@/dtos/PokemonDTO';
 import api from '@/services/api';
@@ -18,24 +19,27 @@ import { formatNameToShow } from '@/common/utils/format';
 import { PokemonSpeciesDTO } from '@/dtos/PokemonSpeciesDTO';
 import { PokemonEvolutionChainDTO } from '@/dtos/PokemonEvolutionChainDTO';
 import {
-  alolaList,
-  galarList,
-  normalList,
-  hisuiList,
   nameFromChainList,
   listForApiMisleadingEvolution,
   correctGalarPokemonsTree,
+  checkAlolaEvolution,
+  checkGalarEvolution,
+  checkHisuiEvolution,
+  checkNormalEvolution,
+  countUniqueSpecies,
 } from '@/common/utils/evolutions';
 import { useTranslation } from 'react-i18next';
+import { Loader } from '@/components/Loader';
 // import { validatePokemonEvolutions } from '@/common/utils/validation';
 
 const defaultValue: PokemonListContext = {
   pokemonList: [],
-  setPokemonList: () => {},
+  setPokemonList: () => { },
   loading: false,
   pokemonLength: 0,
   wantedPokemon: '',
-  setWantedPokemon: () => {},
+  setWantedPokemon: () => { },
+  setLoading: () => { },
 };
 
 const PokemonContext = createContext(defaultValue);
@@ -47,44 +51,8 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
   const [wantedPokemon, setWantedPokemon] = useState('');
   const pokemonDatabase = usePokemonDatabase();
   const { t } = useTranslation();
-
-  const checkAlolaEvolution = useCallback((name: string) => {
-    const hasAlolaEvolution = alolaList[name];
-
-    if (!hasAlolaEvolution) return [];
-
-    return hasAlolaEvolution;
-  }, []);
-
-  const checkGalarEvolution = useCallback((name: string) => {
-    const hasGalarEvolution = galarList[name];
-
-    if (!hasGalarEvolution) {
-      return [];
-    }
-
-    return hasGalarEvolution;
-  }, []);
-
-  const checkNormalEvolution = useCallback((name: string) => {
-    const hasNormalEvolution = normalList[name];
-
-    if (!hasNormalEvolution) {
-      return [];
-    }
-
-    return hasNormalEvolution;
-  }, []);
-
-  const checkHisuiEvolution = useCallback((name: string) => {
-    const hasHisuilEvolution = hisuiList[name];
-
-    if (!hasHisuilEvolution) {
-      return [];
-    }
-
-    return hasHisuilEvolution;
-  }, []);
+  const [monitorProgress, setMonitorProgress] = useState(0);
+  const [total, setTotal] = useState(0);
 
   const extractEvolutions = useCallback((chain: any, name: string) => {
     if (listForApiMisleadingEvolution[name]) {
@@ -124,45 +92,37 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
     }
   }, []);
 
-  const getAllEvolutions = useCallback(
-    (evolutions: string[], name: string) => {
-      const isAlolaPokemon = name.includes('alola');
-      const isGalarPokemon = name.includes('galar');
-      const isHisuiPokemon = name.includes('hisui');
+  const getAllEvolutions = useCallback((evolutions: string[], name: string) => {
+    const isAlolaPokemon = name.includes('alola');
+    const isGalarPokemon = name.includes('galar');
+    const isHisuiPokemon = name.includes('hisui');
 
-      const alolaEvolutionsList = checkAlolaEvolution(name);
+    const alolaEvolutionsList = checkAlolaEvolution(name);
 
-      const galarEvolutionsList = checkGalarEvolution(name);
+    const galarEvolutionsList = checkGalarEvolution(name);
 
-      const normalEvolutionsList = checkNormalEvolution(name);
+    const normalEvolutionsList = checkNormalEvolution(name);
 
-      const hisuiEvolutionsList = checkHisuiEvolution(name);
+    const hisuiEvolutionsList = checkHisuiEvolution(name);
 
-      const apiEvolutionList =
-        isAlolaPokemon ||
+    const apiEvolutionList =
+      isAlolaPokemon ||
         isGalarPokemon ||
         isHisuiPokemon ||
         normalEvolutionsList.length > 0
-          ? []
-          : evolutions;
+        ? []
+        : evolutions;
 
-      const joinChecks = [
-        ...alolaEvolutionsList,
-        ...galarEvolutionsList,
-        ...normalEvolutionsList.filter(name => name !== ''),
-        ...hisuiEvolutionsList,
-        ...apiEvolutionList,
-      ];
+    const joinChecks = [
+      ...alolaEvolutionsList,
+      ...galarEvolutionsList,
+      ...normalEvolutionsList.filter(name => name !== ''),
+      ...hisuiEvolutionsList,
+      ...apiEvolutionList,
+    ];
 
-      return joinChecks;
-    },
-    [
-      checkAlolaEvolution,
-      checkGalarEvolution,
-      checkHisuiEvolution,
-      checkNormalEvolution,
-    ],
-  );
+    return joinChecks;
+  }, []);
 
   const getEvolutionChain = useCallback(
     async (name: string, id: number) => {
@@ -206,6 +166,8 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
       const numberOfPokemons = await api.get<PokemonsDTO>('pokemon');
 
       const { count } = numberOfPokemons.data;
+
+      setTotal(count);
 
       const response = await api.get<PokemonsDTO>(
         `pokemon?limit=${count}&offset=0`,
@@ -322,6 +284,8 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
             return dataToShow;
           } catch (error) {
             return null;
+          } finally {
+            setMonitorProgress(state => state + 1);
           }
         }),
       );
@@ -344,8 +308,6 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
       setPokemonList(validPokemonList);
     } catch (error) {
       Alert.alert(t('list.error.title'), t('list.error.message'));
-    } finally {
-      setLoading(false);
     }
   }, [getAllEvolutions, getEvolutionChain, pokemonDatabase, t]);
 
@@ -405,16 +367,8 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
       }
     } catch (error) {
       Alert.alert(t('list.error.title'), t('list.error.message'));
-    } finally {
-      setLoading(false);
     }
   }, [fetchAllPokemon, pokemonDatabase, t]);
-
-  const countUniqueSpecies = useCallback(() => {
-    const total = _.uniqBy(pokemonList, pokemon => pokemon.species.name).length;
-
-    setPokemonLength(total);
-  }, [pokemonList]);
 
   useEffect(() => {
     getPokemonsList();
@@ -422,9 +376,9 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
 
   useEffect(() => {
     if (pokemonList.length > 0) {
-      countUniqueSpecies();
+      setPokemonLength(countUniqueSpecies(pokemonList));
     }
-  }, [countUniqueSpecies, pokemonList, pokemonList.length]);
+  }, [pokemonList, pokemonList.length]);
 
   return (
     <PokemonContext.Provider
@@ -435,8 +389,18 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
         setPokemonList,
         wantedPokemon,
         setWantedPokemon,
+        setLoading,
       }}
     >
+      {loading && (
+        <Loader
+          fullScreen
+          loadingText={t('home.loading')}
+          showProgressBar
+          progress={monitorProgress}
+          total={total}
+        />
+      )}
       {children}
     </PokemonContext.Provider>
   );

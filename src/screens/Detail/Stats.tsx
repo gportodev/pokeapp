@@ -1,8 +1,8 @@
-import React, { useCallback } from 'react';
+import React, { JSX, useCallback } from 'react';
 import styles from './styles';
 
 import { View, Text } from 'react-native';
-import { ProgressBar } from '@/components/ProgressBar';
+import { StatsProgressBar } from '@/components/StatsProgressBar';
 import { PokemonStat } from '@/dtos/PokemonStatDTO';
 import { Translate } from './Detail';
 import { getStatTranslation } from '@/common/utils/stats';
@@ -54,7 +54,7 @@ function Stats({ stats, themeMode, translate }: StatsProps): JSX.Element {
                 justifyContent: 'center',
               }}
             >
-              <ProgressBar progress={value} />
+              <StatsProgressBar progress={value} />
             </View>
           );
         default:

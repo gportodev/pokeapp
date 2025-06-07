@@ -1,5 +1,6 @@
 import React, {
   createContext,
+  JSX,
   ReactNode,
   useContext,
   useEffect,
@@ -23,7 +24,7 @@ type UpContext = {
 
 const defaultValue: UpContext = {
   hasUpdate: false,
-  setHasUpdate: () => {},
+  setHasUpdate: () => { },
 };
 
 const UpdateContext = createContext(defaultValue);
@@ -38,7 +39,7 @@ function UpdateProvider({ children }: UpdateProps): JSX.Element {
     try {
       const androidPackage = Constants.expoConfig?.android?.package;
 
-      if (!androidPackage) return;
+      if (!androidPackage || androidPackage.includes('dev')) return;
 
       const currentVersion = Constants.expoConfig?.version;
 
@@ -86,6 +87,10 @@ function UpdateProvider({ children }: UpdateProps): JSX.Element {
 
   useEffect(() => {
     const timeout = setTimeout(async () => {
+      const androidPackage = Constants.expoConfig?.android?.package;
+
+      if (!androidPackage || androidPackage.includes('dev')) return;
+
       await requestStoreReview();
     }, 5000);
 

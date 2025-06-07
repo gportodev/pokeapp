@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import api from '@/services/api';
 import { View, Text, FlatList, Alert } from 'react-native';
 import { PokemonDTO } from '@/dtos/PokemonDTO';

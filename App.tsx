@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { JSX } from 'react';
 import { StatusBar } from 'expo-status-bar';
 
 import useCachedResources from '@/hooks/useCachedResources';
