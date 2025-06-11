@@ -1,5 +1,6 @@
 import React, {
   createContext,
+  JSX,
   ReactNode,
   useContext,
   useEffect,
@@ -20,7 +21,7 @@ type LangContext = {
 
 const defaultValue: LangContext = {
   locale: '',
-  changeLanguage: () => {},
+  changeLanguage: () => { },
 };
 
 const LanguageContext = createContext(defaultValue);

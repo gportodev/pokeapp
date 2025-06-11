@@ -13,6 +13,8 @@ type PokemonListContext = {
   wantedPokemon: string;
   setWantedPokemon: React.Dispatch<React.SetStateAction<string>>;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  monitorProgress: number;
+  total: number;
 };
 
 export { PokemonProps, PokemonListContext };

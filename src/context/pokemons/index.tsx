@@ -29,7 +29,7 @@ import {
   countUniqueSpecies,
 } from '@/common/utils/evolutions';
 import { useTranslation } from 'react-i18next';
-import { Loader } from '@/components/Loader';
+import { StartScreen } from '@/components/StartScreen';
 // import { validatePokemonEvolutions } from '@/common/utils/validation';
 
 const defaultValue: PokemonListContext = {
@@ -40,6 +40,8 @@ const defaultValue: PokemonListContext = {
   wantedPokemon: '',
   setWantedPokemon: () => { },
   setLoading: () => { },
+  monitorProgress: 0,
+  total: 0,
 };
 
 const PokemonContext = createContext(defaultValue);
@@ -358,9 +360,12 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
             evolutions: JSON.parse(evolutions),
           };
 
+          setMonitorProgress(state => state + 1);
+
           return formatted;
         });
 
+        setTotal(convertedList.length);
         setPokemonList(convertedList);
       } else {
         await fetchAllPokemon();
@@ -390,17 +395,10 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
         wantedPokemon,
         setWantedPokemon,
         setLoading,
+        monitorProgress,
+        total,
       }}
     >
-      {loading && (
-        <Loader
-          fullScreen
-          loadingText={t('home.loading')}
-          showProgressBar
-          progress={monitorProgress}
-          total={total}
-        />
-      )}
       {children}
     </PokemonContext.Provider>
   );
