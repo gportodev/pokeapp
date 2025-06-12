@@ -81,7 +81,7 @@ type ThemeContextType = {
 
 const defaultValue: ThemeContextType = {
   theme: lightTheme,
-  storeTheme: () => {},
+  storeTheme: () => { },
 };
 
 const ThemeContext = createContext(defaultValue);

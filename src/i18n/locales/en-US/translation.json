@@ -42,7 +42,10 @@
     }
   },
   "home": {
-    "loading": "Loading pokemons...",
+      "loading": {
+      "title":"Loading pokémons...",
+      "subTitle": "this might take a little while"
+    },
     "input": {
       "text": "Search"
     },

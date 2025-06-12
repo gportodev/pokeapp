@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import { View, Text, FlatList } from 'react-native';
 import { PokemonDTO } from '@/dtos/PokemonDTO';
 import styles from './styles';
