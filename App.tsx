@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { JSX } from 'react';
 import { StatusBar } from 'expo-status-bar';
 
 import useCachedResources from '@/hooks/useCachedResources';
@@ -11,12 +11,22 @@ import { LanguageProvider } from '@/context/language';
 import { Routes } from '@/routes';
 import { ThemeProvider } from '@/context/theme';
 import { UpdateProvider } from '@/context/update';
+import { SafeAreaView } from 'react-native';
 
 export default function App(): JSX.Element {
   const isLoading = useCachedResources();
 
   if (!isLoading) {
-    return <Loader fullScreen />;
+    return (
+      <SafeAreaView
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+        }}
+      >
+        <Loader />
+      </SafeAreaView>
+    );
   }
 
   return (

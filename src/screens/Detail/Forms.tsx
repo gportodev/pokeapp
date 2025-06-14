@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import api from '@/services/api';
 import { View, Text, FlatList, Alert } from 'react-native';
 import { PokemonDTO } from '@/dtos/PokemonDTO';
@@ -10,6 +10,7 @@ import { usePokemon } from '@/context/pokemons';
 import { Loader } from '@/components/Loader';
 import { Translate } from '.';
 import { useTranslation } from 'react-i18next';
+import { handleErrorFeedback } from '@/common/utils/error';
 
 type FormsProps = Translate & {
   pokemon: PokemonDTO;
@@ -74,7 +75,8 @@ function Forms({
         setForms(pokemonForms.filter(Boolean) as PokemonDTO[]);
       }
     } catch (error) {
-      Alert.alert(
+      handleErrorFeedback(
+        error,
         t('detail.forms.error.title'),
         t('detail.forms.error.message'),
       );
@@ -93,16 +95,20 @@ function Forms({
   const renderEmpty = useMemo(() => {
     return (
       <View>
-        <Text
-          style={{
-            color: themeColor,
-          }}
-        >
-          {translate('detail.forms.none')}
-        </Text>
+        {loading ? (
+          <Loader size={'small'} />
+        ) : (
+          <Text
+            style={{
+              color: themeColor,
+            }}
+          >
+            {translate('detail.forms.none')}
+          </Text>
+        )}
       </View>
     );
-  }, [themeColor, translate]);
+  }, [loading, themeColor, translate]);
 
   const renderForms = useMemo(
     () => (
@@ -116,15 +122,6 @@ function Forms({
       />
     ),
     [forms, renderEmpty, renderItem],
-  );
-
-  const renderLoading = useMemo(
-    () => (
-      <View>
-        <Loader height={70} width={70} loadingText={t('forms.loading')} />
-      </View>
-    ),
-    [t],
   );
 
   useEffect(() => {
@@ -148,7 +145,7 @@ function Forms({
         {translate('detail.forms.title')}
       </Text>
 
-      {loading ? renderLoading : renderForms}
+      {renderForms}
     </View>
   );
 }
