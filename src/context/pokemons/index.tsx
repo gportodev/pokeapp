@@ -34,12 +34,12 @@ import { StartScreen } from '@/components/StartScreen';
 
 const defaultValue: PokemonListContext = {
   pokemonList: [],
-  setPokemonList: () => { },
+  setPokemonList: () => {},
   loading: false,
   pokemonLength: 0,
   wantedPokemon: '',
-  setWantedPokemon: () => { },
-  setLoading: () => { },
+  setWantedPokemon: () => {},
+  setLoading: () => {},
   monitorProgress: 0,
   total: 0,
 };
@@ -109,9 +109,9 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
 
     const apiEvolutionList =
       isAlolaPokemon ||
-        isGalarPokemon ||
-        isHisuiPokemon ||
-        normalEvolutionsList.length > 0
+      isGalarPokemon ||
+      isHisuiPokemon ||
+      normalEvolutionsList.length > 0
         ? []
         : evolutions;
 
@@ -235,12 +235,15 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
 
             const flattenedWeaknesses = [...new Set(pokemonWeaknesses.flat())];
 
-            const imagePath = await saveImage(
-              sprites.other['official-artwork'].front_default,
-              name,
-            );
+            //Example
+            //image:...other/official-artwork/1.png
+            //name: bulbasaur
+            // const imagePath = await saveImage(
+            //   sprites.other['official-artwork'].front_default,
+            //   name,
+            // );
 
-            if (!imagePath) return null;
+            const imagePath = sprites.other['official-artwork'].front_default;
 
             const pokemonEvolutions =
               id > 1025
@@ -253,7 +256,7 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
               ...pokemonInfo.data,
               displayId: match[1],
               displayName: formatNameToShow(name),
-              avatar: imagePath,
+              avatar: imagePath ?? '',
               weaknesses: flattenedWeaknesses,
               stats: formattedStatsName,
               evolutions: pokemonEvolutions,

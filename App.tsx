@@ -11,7 +11,7 @@ import { LanguageProvider } from '@/context/language';
 import { Routes } from '@/routes';
 import { ThemeProvider } from '@/context/theme';
 import { UpdateProvider } from '@/context/update';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function App(): JSX.Element {
   const isLoading = useCachedResources();

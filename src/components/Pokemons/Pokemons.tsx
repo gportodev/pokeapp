@@ -4,7 +4,7 @@ import styles from './styles';
 
 import { Pokemon } from '../Pokemon';
 import { PokemonDTO } from '@/dtos/PokemonDTO';
-import { ActivityIndicator, FlatList, SafeAreaView } from 'react-native';
+import { ActivityIndicator, FlatList } from 'react-native';
 import { View, Text } from 'react-native';
 import { usePokemon } from '@/context/pokemons';
 import { Filter } from '../Filter';
@@ -12,6 +12,7 @@ import { PokeballIcon, SadIcon } from '@/assets/icons/Loader';
 import { Fonts } from '@/constants/fonts';
 import { useTheme } from '@/context/theme';
 import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type PokemonsProps = {
   onPress: (item: PokemonDTO) => void;
