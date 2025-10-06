@@ -7,14 +7,13 @@ import React, {
   JSX,
 } from 'react';
 import { PokemonDTO } from '@/dtos/PokemonDTO';
-import api from '@/services/api';
-import { PokemonsDTO } from '@/dtos/PokemonsDTO';
+import { api } from '@/services/api';
 import { Alert } from 'react-native';
 import { usePokemonDatabase } from '@/database/usePokemonDatabase';
 import _ from 'lodash';
 
 import { PokemonListContext, PokemonProps } from './types';
-import { saveImage } from '@/common/utils/file';
+// import { saveImage } from '@/common/utils/file';
 import { formatNameToShow } from '@/common/utils/format';
 import { PokemonSpeciesDTO } from '@/dtos/PokemonSpeciesDTO';
 import { PokemonEvolutionChainDTO } from '@/dtos/PokemonEvolutionChainDTO';
@@ -29,7 +28,9 @@ import {
   countUniqueSpecies,
 } from '@/common/utils/evolutions';
 import { useTranslation } from 'react-i18next';
-import { StartScreen } from '@/components/StartScreen';
+import { useGetTotalOfPokemons } from '@/hooks/useGetTotalOfPokemons';
+import { useGetAllPokemons } from '@/hooks/useGetAllPokemons';
+// import { StartScreen } from '@/components/StartScreen';
 // import { validatePokemonEvolutions } from '@/common/utils/validation';
 
 const defaultValue: PokemonListContext = {
@@ -55,6 +56,9 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
   const { t } = useTranslation();
   const [monitorProgress, setMonitorProgress] = useState(0);
   const [total, setTotal] = useState(0);
+  // const currentTotalPokemon = 900;
+  const { data: count = 0 } = useGetTotalOfPokemons();
+  const { data: results = [] } = useGetAllPokemons({ count });
 
   const extractEvolutions = useCallback((chain: any, name: string) => {
     if (listForApiMisleadingEvolution[name]) {
@@ -164,18 +168,7 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
   const fetchAllPokemon = useCallback(async () => {
     try {
       setLoading(true);
-
-      const numberOfPokemons = await api.get<PokemonsDTO>('pokemon');
-
-      const { count } = numberOfPokemons.data;
-
       setTotal(count);
-
-      const response = await api.get<PokemonsDTO>(
-        `pokemon?limit=${count}&offset=0`,
-      );
-
-      const { results } = response.data;
 
       const arr: (PokemonDTO | null)[] = await Promise.all(
         results.map(async pokemon => {
@@ -314,62 +307,68 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
     } catch (error) {
       Alert.alert(t('list.error.title'), t('list.error.message'));
     }
-  }, [getAllEvolutions, getEvolutionChain, pokemonDatabase, t]);
+  }, [count, getAllEvolutions, getEvolutionChain, pokemonDatabase, results, t]);
 
   const getPokemonsList = useCallback(async (): Promise<void> => {
     try {
-      setLoading(true);
-
       const response = await pokemonDatabase.searchAll();
 
       if (response.length > 0) {
-        const convertedList = response.map(row => {
-          const {
-            types,
-            sprites,
-            abilities,
-            moves,
-            species,
-            past_types,
-            held_items,
-            game_indices,
-            forms,
-            cries,
-            stats,
-            is_default,
-            pokemon_order,
-            weaknesses,
-            avatar,
-            evolutions,
-          } = row;
+        const localCount = await pokemonDatabase.getPokemonsCount();
 
-          const formatted: PokemonDTO = {
-            ...row,
-            types: JSON.parse(types),
-            sprites: JSON.parse(sprites),
-            stats: JSON.parse(stats),
-            abilities: JSON.parse(abilities),
-            moves: JSON.parse(moves),
-            species: JSON.parse(species),
-            past_types: JSON.parse(past_types),
-            held_items: JSON.parse(held_items),
-            game_indices: JSON.parse(game_indices),
-            forms: JSON.parse(forms),
-            cries: JSON.parse(cries),
-            is_default: is_default === 1,
-            order: pokemon_order,
-            weaknesses: JSON.parse(weaknesses),
-            avatar: JSON.parse(avatar),
-            evolutions: JSON.parse(evolutions),
-          };
+        if (localCount !== count) {
+          await pokemonDatabase.deleteAllPokemons();
+          await fetchAllPokemon();
+        } else {
+          const convertedList = response.map(row => {
+            const {
+              types,
+              sprites,
+              abilities,
+              moves,
+              species,
+              past_types,
+              held_items,
+              game_indices,
+              forms,
+              cries,
+              stats,
+              is_default,
+              pokemon_order,
+              weaknesses,
+              avatar,
+              evolutions,
+            } = row;
 
-          setMonitorProgress(state => state + 1);
+            const formatted: PokemonDTO = {
+              ...row,
+              types: JSON.parse(types),
+              sprites: JSON.parse(sprites),
+              stats: JSON.parse(stats),
+              abilities: JSON.parse(abilities),
+              moves: JSON.parse(moves),
+              species: JSON.parse(species),
+              past_types: JSON.parse(past_types),
+              held_items: JSON.parse(held_items),
+              game_indices: JSON.parse(game_indices),
+              forms: JSON.parse(forms),
+              cries: JSON.parse(cries),
+              is_default: is_default === 1,
+              order: pokemon_order,
+              weaknesses: JSON.parse(weaknesses),
+              avatar: JSON.parse(avatar),
+              evolutions: JSON.parse(evolutions),
+            };
 
-          return formatted;
-        });
+            setMonitorProgress(state => state + 1);
 
-        setTotal(convertedList.length);
-        setPokemonList(convertedList);
+            return formatted;
+          });
+
+          setTotal(convertedList.length);
+          setPokemonList(convertedList);
+          setLoading(false);
+        }
       } else {
         await fetchAllPokemon();
       }
@@ -379,8 +378,12 @@ function PokemonProvider({ children }: PokemonProps): JSX.Element {
   }, [fetchAllPokemon, pokemonDatabase, t]);
 
   useEffect(() => {
-    getPokemonsList();
-  }, []);
+    setLoading(true);
+
+    if (count > 0 && results.length > 0) {
+      getPokemonsList();
+    }
+  }, [count, results.length]);
 
   useEffect(() => {
     if (pokemonList.length > 0) {

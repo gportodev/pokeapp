@@ -184,5 +184,33 @@ export function usePokemonDatabase() {
     }
   }
 
-  return { create, searchAll, searchOne, updatePokemonEvolutions };
+  async function deleteAllPokemons() {
+    try {
+      const query = 'DELETE FROM pokemons';
+      await database.runAsync(query);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async function getPokemonsCount() {
+    try {
+      const query = 'SELECT COUNT(*) as total FROM pokemons';
+      const result = await database.getFirstAsync<{ total: number }>(query);
+
+      return result?.total ?? 0;
+    } catch (error) {
+      console.error('Erro ao contar pokémons: ', error);
+      throw error;
+    }
+  }
+
+  return {
+    create,
+    searchAll,
+    searchOne,
+    updatePokemonEvolutions,
+    deleteAllPokemons,
+    getPokemonsCount,
+  };
 }
