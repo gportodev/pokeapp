@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import styles from './styles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -8,6 +8,7 @@ import { useTheme } from '@/context/theme';
 import { Switch } from './Switch';
 import { SettingsProps } from '@/routes/types';
 import { Language } from './Language';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 function Settings({ navigation }: SettingsProps): JSX.Element {
   const { theme: themeMode } = useTheme();

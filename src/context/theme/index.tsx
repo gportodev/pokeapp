@@ -9,6 +9,7 @@ import React, {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DarkTheme, DefaultTheme, Theme } from '@react-navigation/native';
 import colors from '@/constants/colors';
+import { Fonts } from '@/constants/fonts';
 
 export type CustomTheme = Theme & {
   colors: Theme['colors'] & {
@@ -64,6 +65,24 @@ const lightTheme: CustomTheme = {
     ...DefaultTheme.colors,
     ...colors.theme.light,
   },
+  fonts: {
+    regular: {
+      fontFamily: Fonts.inter_regular,
+      fontWeight: '400',
+    },
+    medium: {
+      fontFamily: Fonts.inter_medium,
+      fontWeight: '500',
+    },
+    bold: {
+      fontFamily: Fonts.inter_semibold,
+      fontWeight: '600',
+    },
+    heavy: {
+      fontFamily: Fonts.montserrat_bold,
+      fontWeight: '700',
+    },
+  },
 };
 
 const darkTheme: CustomTheme = {
@@ -71,6 +90,24 @@ const darkTheme: CustomTheme = {
   colors: {
     ...DarkTheme.colors,
     ...colors.theme.dark,
+  },
+  fonts: {
+    regular: {
+      fontFamily: Fonts.inter_regular,
+      fontWeight: '400',
+    },
+    medium: {
+      fontFamily: Fonts.inter_medium,
+      fontWeight: '500',
+    },
+    bold: {
+      fontFamily: Fonts.inter_semibold,
+      fontWeight: '600',
+    },
+    heavy: {
+      fontFamily: Fonts.montserrat_bold,
+      fontWeight: '700',
+    },
   },
 };
 
@@ -81,7 +118,7 @@ type ThemeContextType = {
 
 const defaultValue: ThemeContextType = {
   theme: lightTheme,
-  storeTheme: () => { },
+  storeTheme: () => {},
 };
 
 const ThemeContext = createContext(defaultValue);

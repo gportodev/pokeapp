@@ -2,7 +2,6 @@ import React from 'react';
 import {
   View,
   Text,
-  SafeAreaView,
   TouchableOpacity,
   Linking,
   ScrollView,
@@ -14,6 +13,7 @@ import { ArrowIcon } from '@/assets/icons/Loader';
 import { useTheme } from '@/context/theme';
 import { AboutProps } from '@/routes/types';
 import Constants from 'expo-constants';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 function About({ navigation }: AboutProps): JSX.Element {
   const { theme: themeMode } = useTheme();
