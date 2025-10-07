@@ -17,7 +17,7 @@ module.exports = {
   expo: {
     name: 'pokeapp',
     slug: 'pokeapp',
-    version: '1.0.6',
+    version: '1.0.7',
     orientation: 'portrait',
     icon: './assets/icon.png',
     splash: {
@@ -47,7 +47,7 @@ module.exports = {
       },
     },
     web: {},
-    plugins: ['expo-asset', 'expo-font', 'expo-localization'],
+    plugins: ['expo-asset', 'expo-font', 'expo-localization', 'expo-sqlite'],
     extra: {
       eas: {
         projectId: 'ee361421-8b4b-4ead-b120-bf0a6dc03140',

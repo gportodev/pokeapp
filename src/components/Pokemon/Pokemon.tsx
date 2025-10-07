@@ -7,6 +7,8 @@ import { PokemonType } from '@/common/utils/types';
 import { getIconFromType } from '@/common/utils/icon';
 import { getTagFromType } from '@/common/utils/tag';
 import { useTheme } from '@/context/theme';
+import { EmptyIcon } from '@/assets/icons/Loader';
+import colors from '@/constants/colors';
 
 type PokemonProps = {
   item: PokemonDTO;
@@ -40,7 +42,9 @@ function Pokemon({ item, onPress }: PokemonProps): JSX.Element {
       ]}
       onPress={() => onPress(item)}
     >
-      {avatar && (
+      {avatar === '' ? (
+        <EmptyIcon width={100} height={100} color={colors.gray_bold} />
+      ) : (
         <View
           style={[
             styles.imageContainer,

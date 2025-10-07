@@ -1,7 +1,7 @@
 import React, { JSX, useCallback } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Pokemons } from '../../components/Pokemons';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { HomeProps } from '@/routes/types';
 import { PokemonDTO } from '@/dtos/PokemonDTO';

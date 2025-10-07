@@ -11,7 +11,10 @@ import { LanguageProvider } from '@/context/language';
 import { Routes } from '@/routes';
 import { ThemeProvider } from '@/context/theme';
 import { UpdateProvider } from '@/context/update';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 export default function App(): JSX.Element {
   const isLoading = useCachedResources();
@@ -30,17 +33,22 @@ export default function App(): JSX.Element {
   }
 
   return (
-    <ThemeProvider>
-      <LanguageProvider>
-        <UpdateProvider>
-          <SQLiteProvider databaseName="pokemon.db" onInit={initializeDatabase}>
-            <StatusBar />
-            <PokemonProvider>
-              <Routes />
-            </PokemonProvider>
-          </SQLiteProvider>
-        </UpdateProvider>
-      </LanguageProvider>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <LanguageProvider>
+          <UpdateProvider>
+            <SQLiteProvider
+              databaseName="pokemon.db"
+              onInit={initializeDatabase}
+            >
+              <StatusBar />
+              <PokemonProvider>
+                <Routes />
+              </PokemonProvider>
+            </SQLiteProvider>
+          </UpdateProvider>
+        </LanguageProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
