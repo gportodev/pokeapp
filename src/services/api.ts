@@ -7,7 +7,7 @@ const api = axios.create({
 
 async function getTotalOfPokemons() {
   try {
-    const response = await api.get<Pick<PokemonsDTO, 'count'>>('pokemon');
+    const response = await api.get<Pick<PokemonsDTO, 'count'>>('pokemon/');
 
     const { count } = response.data;
 
@@ -26,8 +26,6 @@ async function getAllPokemons(count: number) {
     );
 
     const { results } = response.data;
-
-    console.log('results length: ' + results.length);
 
     return results;
   } catch (error) {
