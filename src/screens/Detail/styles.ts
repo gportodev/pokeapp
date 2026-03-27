@@ -62,7 +62,7 @@ export default StyleSheet.create({
   infoContainer: {
     flex: 1,
     paddingHorizontal: 24,
-    paddingTop: 100,
+    // paddingTop: 100,
   },
   infoHeaderContainer: {
     gap: 10,

@@ -55,7 +55,16 @@ function Pokemon({ item, onPress }: PokemonProps): JSX.Element {
             },
           ]}
         >
-          <Image source={{ uri: item.avatar }} style={styles.image} />
+          {/* <Image source={{ uri: item.avatar }} style={styles.image} /> */}
+          <Text
+            style={{
+              fontSize: 40,
+              color: getTagFromType(item.types[0].type.name as PokemonType)
+                .text,
+            }}
+          >
+            {item.displayName.charAt(0).toUpperCase()}
+          </Text>
         </View>
       )}
 
