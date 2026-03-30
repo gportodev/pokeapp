@@ -80,7 +80,7 @@ function Header({ item, onPress }: HeaderProps) {
       <TouchableOpacity onPress={onPress} style={styles.backButtonContainer}>
         <ArrowIcon color={theme.colors.text} width={24} height={24} />
       </TouchableOpacity>
-      {/*
+
       {item.avatar === '' ? (
         <View
           style={{
@@ -97,7 +97,7 @@ function Header({ item, onPress }: HeaderProps) {
           source={{ uri: item.avatar }}
           style={styles.headerPokemonAvatar}
         />
-      )} */}
+      )}
     </SafeAreaView>
   );
 }
